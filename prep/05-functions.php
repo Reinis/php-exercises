@@ -3,23 +3,23 @@
 echo "===== Exercise 1\n";
 // Create a function that accepts any string and returns the same value with
 // added "codelex" by the end of it. Print this value out.
-function append_codelex(string $input): string
+function appendCodelex(string $input): string
 {
     return $input . 'codelex';
 }
 
-echo append_codelex('hello ') . "\n";
+echo appendCodelex('hello ') . "\n";
 
 echo "\n===== Exercise 2\n";
 // Create a function that accepts 2 integer arguments. First argument is
 // a base value and the second one is a value its been multiplied by. For
 // example, given argument 10 and 5 prints out 50
-function multiply_two(int $x, int $y)
+function multiplyTwo(int $x, int $y): int
 {
     return $x * $y;
 }
 
-echo multiply_two(10, 5) . "\n";
+echo multiplyTwo(10, 5) . "\n";
 
 echo "\n===== Exercise 3\n";
 // Create a person object with name, surname and age. Create a function that
@@ -41,16 +41,16 @@ class Person
 
 $person = new Person('John', 'Doe', 23);
 
-function is_adult(Person $person): void
+function isAdult(Person $person): bool
 {
-    if ($person->age >= 18) {
-        echo "{$person->name} {$person->surname} has reached the age of 18.\n";
-    } else {
-        echo "{$person->name} {$person->surname} has not reached the age of 18.\n";
-    }
+    return $person->age >= 18;
 }
 
-is_adult($person);
+if (isAdult($person)) {
+    echo "{$person->name} {$person->surname} has reached the age of 18.\n";
+} else {
+    echo "{$person->name} {$person->surname} has not reached the age of 18.\n";
+}
 
 echo "\n===== Exercise 4\n";
 // Create a array of objects that uses the function of exercise 3 but in loop
@@ -63,7 +63,11 @@ $people = [
 ];
 
 foreach ($people as $person) {
-    is_adult($person);
+    if (isAdult($person)) {
+        echo "{$person->name} {$person->surname} has reached the age of 18.\n";
+    } else {
+        echo "{$person->name} {$person->surname} has not reached the age of 18.\n";
+    }
 }
 
 echo "\n===== Exercise 5\n";
@@ -73,7 +77,7 @@ echo "\n===== Exercise 5\n";
 // that over 10 kg shipping costs are 2 euros, otherwise its 1 euro. Using
 // foreach loop print out the values of the fruits and how much it would cost
 // to ship this product.
-function get_delivery_cost(int $weight): int
+function getDeliveryCost(int $weight): int
 {
     switch (true) {
         case ($weight > 10):
@@ -101,7 +105,7 @@ $products = [
 $shippingCosts = [];
 
 foreach ($products as $product) {
-    $shippingCosts[$product['weight']] = get_delivery_cost($product['weight']);
+    $shippingCosts[$product['weight']] = getDeliveryCost($product['weight']);
 }
 
 foreach ($products as $key => $value) {
@@ -117,7 +121,7 @@ echo "\n===== Exercise 6\n";
 // Create a function that doubles the integer number. Within the loop using php
 // in-built function print out the double of the number value (using your
 // custom function).
-function double_int(int $num): int
+function doubleInt(int $num): int
 {
     return $num * 2;
 }
@@ -128,7 +132,7 @@ for ($i = 0; $i < count($arr); $i++) {
     $num = $arr[$i];
 
     if (is_int($num)) {
-        print(double_int($arr[$i]) . "\n");
+        print(doubleInt($arr[$i]) . "\n");
     }
 }
 
@@ -145,7 +149,7 @@ class Client
     public array $licenses;
     public float $cash;
 
-    public function __construct($name, $licenses, $cash)
+    public function __construct(string $name, array $licenses, float $cash)
     {
         $this->name = $name;
         $this->licenses = $licenses;
@@ -159,7 +163,7 @@ class Gun
     public string $license;
     public float $price;
 
-    public function __construct($name, $license, $price)
+    public function __construct(string $name, string $license, float $price)
     {
         $this->name = $name;
         $this->license = $license;
