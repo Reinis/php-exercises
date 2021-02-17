@@ -77,14 +77,18 @@ echo "\n===== Exercise 5\n";
 // that over 10 kg shipping costs are 2 euros, otherwise its 1 euro. Using
 // foreach loop print out the values of the fruits and how much it would cost
 // to ship this product.
-function getDeliveryCost(int $weight): int
+function getDeliveryCost(array $shippingCosts, int $weight): int
 {
-    switch (true) {
-        case ($weight > 10):
-            return 2;
-        default:
-            return 1;
+    $cost = 0;
+
+    foreach ($shippingCosts as $key => $value) {
+        if ($weight <= $key) {
+            break;
+        }
+        $cost = $value;
     }
+
+    return $cost;
 }
 
 $products = [
@@ -102,16 +106,15 @@ $products = [
     ]
 ];
 
-$shippingCosts = [];
-
-foreach ($products as $product) {
-    $shippingCosts[$product['weight']] = getDeliveryCost($product['weight']);
-}
+$shippingCosts = [
+    0 => 1,
+    10 => 2
+];
 
 foreach ($products as $key => $value) {
     echo "{$key}:\n name = {$value['name']}\n";
     echo " weight = {$value['weight']}kg\n";
-    echo " shipping cost = {$shippingCosts[$value['weight']]}€\n";
+    echo " shipping cost = " . getDeliveryCost($shippingCosts, $value['weight']) . "€\n";
 }
 
 echo "\n===== Exercise 6\n";
