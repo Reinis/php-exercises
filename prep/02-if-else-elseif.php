@@ -2,12 +2,12 @@
 
 echo "===== Exercise 1\n";
 // Given variables (int) 10, string "10" determine if they both are the same.
-$i = 10;
-$s = '10';
+$number = 10;
+$text = '10';
 
-if ($i === $s) {
+if ($number === $text) {
     echo 'Inputs are the same';
-} else if ($i == $s) {
+} else if ($number == $text) {
     echo 'Inputs are equal';
 } else {
     echo 'Inputs are different';
@@ -17,9 +17,9 @@ echo "\n";
 
 echo "\n===== Exercise 2\n";
 // Given variable (int) 50, determine if its in the range of 1 and 100.
-$i = 50;
+$number = 50;
 
-if (1 <= $i && $i <= 100) {
+if (1 <= $number && $number <= 100) {
     echo 'Number is in range [1; 100].';
 } else {
     echo 'Number is out of range.';
@@ -30,9 +30,9 @@ echo "\n";
 echo "\n===== Exercise 3\n";
 // Given variables (string) "hello" create a condition that if the given value
 // is "hello" then output "world".
-$s = 'hello';
+$text = 'hello';
 
-if ($s === 'hello') {
+if ($text === 'hello') {
     echo 'world';
 } else {
     echo ':(';
@@ -44,7 +44,7 @@ echo "\n===== Exercise 4\n";
 // By your choice, create condition with 3 checks.
 // For example, if value is greater than X, less than Y and is an even number.
 
-if (1 <= $i && $i <= 100 && $i % 2 === 0) {
+if (1 <= $number && $number <= 100 && $number % 2 === 0) {
     echo 'The even number is in range [1; 100].';
 } else {
     echo 'Invalid number.';
@@ -56,11 +56,11 @@ echo "\n===== Exercise 5\n";
 // Given variable (int) 50 create a condition that prints out "correct" if the
 // variable is inside the range.
 // Range should be stored within the 2 separated variables $y and $z.
-$i = 50;
-$x = 1;
-$y = 100;
+$number = 50;
+$start = 1;
+$end = 100;
 
-if ($x <= $i && $i <= $y) {
+if ($start <= $number && $number <= $end) {
     echo "correct\n";
 }
 
