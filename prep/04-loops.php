@@ -2,10 +2,10 @@
 
 echo "===== Exercise 1\n";
 // Create an array with integers (up to 10) and print them out using foreach loop.
-$arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+$numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-foreach ($arr as $i) {
-    echo $i . ' ';
+foreach ($numbers as $number) {
+    echo $number . ' ';
 }
 
 echo "\n";
@@ -13,8 +13,8 @@ echo "\n";
 echo "\n===== Exercise 2\n";
 // Create an array with integers (up to 10) and print them out using for loop.
 
-for ($i = 0; $i < count($arr); $i++) {
-    echo $arr[$i] . ' ';
+for ($i = 0; $i < count($numbers); $i++) {
+    echo $numbers[$i] . ' ';
 }
 
 echo "\n";
@@ -34,11 +34,11 @@ echo "\n";
 echo "\n===== Exercise 4\n";
 // Create a non associative array with integers and print out only integers
 // that divides by 3 without any left.
-$arr = [2, 4, 5, 6, 9, 13, 14, 21, 47, 57];
+$numbers = [2, 4, 5, 6, 9, 13, 14, 21, 47, 57];
 
-foreach ($arr as $element) {
-    if ($element % 3 === 0) {
-        echo $element . ' ';
+foreach ($numbers as $number) {
+    if ($number % 3 === 0) {
+        echo $number . ' ';
     }
 }
 
@@ -48,7 +48,7 @@ echo "\n===== Exercise 5\n";
 // Create an associative array with objects of multiple persons.
 // Each person should have a name, surname, age and birthday. Using loop
 // (by your choice) print out every persons personal data.
-$arr = [
+$peopleList = [
     'person1' => [
         'name' => 'John',
         'surname' => 'Doe',
@@ -69,12 +69,12 @@ $arr = [
     ]
 ];
 
-$persons = [];
+$people = [];
 
-foreach ($arr as $key => $value) {
-    $persons[$key] = (object) $value;
+foreach ($peopleList as $key => $value) {
+    $people[$key] = (object) $value;
 }
 
-foreach ($persons as $person) {
+foreach ($people as $person) {
     echo "{$person->name} {$person->surname} {$person->birthday} ({$person->age})\n";
 }
