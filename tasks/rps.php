@@ -18,6 +18,11 @@ EOL;
 
 $move = readline('-> ');
 
+if (!in_array($move, array_keys($moves))) {
+    echo 'Invalid move!' . PHP_EOL;
+    exit(1);
+}
+
 echo $moves[$move] . ' x ' . $moves[$play] . PHP_EOL;
 
 switch ($move) {
