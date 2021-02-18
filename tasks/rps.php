@@ -1,22 +1,22 @@
 <?php
 
 $moves = [
-    1 => '✊',
-    2 => '✋',
-    3 => '✌'
+    0 => '✊',
+    1 => '✋',
+    2 => '✌'
 ];
 
-$play = random_int(1, 3);
+$play = array_rand(array_keys($moves));
 
 echo <<<EOL
 Make your move!
-1 - rock
-2 - paper
-3 - scissors
+0 - rock
+1 - paper
+2 - scissors
 
 EOL;
 
-$move = readline('-> ');
+$move = (int)readline('-> ');
 
 if (!in_array($move, array_keys($moves))) {
     echo 'Invalid move!' . PHP_EOL;
@@ -25,32 +25,11 @@ if (!in_array($move, array_keys($moves))) {
 
 echo $moves[$move] . ' x ' . $moves[$play] . PHP_EOL;
 
-switch ($move) {
-    case 1:
-        if ($play === 1) {
-            echo 'draw' . PHP_EOL;
-        } elseif ($play === 2) {
-            echo 'loose' . PHP_EOL;
-        } elseif ($play === 3) {
-            echo 'win' . PHP_EOL;
-        }
-        break;
-    case 2:
-        if ($play === 2) {
-            echo 'draw' . PHP_EOL;
-        } elseif ($play === 3) {
-            echo 'loose' . PHP_EOL;
-        } elseif ($play === 1) {
-            echo 'win' . PHP_EOL;
-        }
-        break;
-    case 3:
-        if ($play === 3) {
-            echo 'draw' . PHP_EOL;
-        } elseif ($play === 1) {
-            echo 'loose' . PHP_EOL;
-        } elseif ($play === 2) {
-            echo 'win' . PHP_EOL;
-        }
-        break;
+if ($move === $play) {
+    echo 'draw';
+} elseif (array_keys($moves)[($move + 1) % 3] === $play) {
+    echo 'loose';
+} else {
+    echo 'win';
 }
+echo PHP_EOL;
