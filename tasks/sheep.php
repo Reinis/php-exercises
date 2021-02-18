@@ -7,15 +7,13 @@ $animals = ['sheep', 'sheep', 'sheep', 'wolf', 'sheep', 'wolf', 'sheep', 'sheep'
 $size = count($animals);
 
 for ($i = 0; $i < $size; $i++) {
-    if ($i === 0) {
-        $neighbours = [$animals[1]];
-    } elseif ($i === $size - 1) {
-        $neighbours = [$animals[$size - 2]];
-    } else {
-        $neighbours = [
-            $animals[$i - 1],
-            $animals[$i + 1]
-        ];
+    $neighbours = [];
+
+    if ($i !== 0) {
+        $neighbours[] = $animals[$i - 1];
+    }
+    if ($i !== $size - 1) {
+        $neighbours[] = $animals[$i + 1];
     }
 
     switch ($animals[$i]) {
