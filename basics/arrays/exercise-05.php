@@ -10,11 +10,11 @@ $players = ['X', 'O'];
 
 function displayBoard(array $board): void
 {
-    echo " {$board[0][0]} | {$board[0][1]} | {$board[0][2]} \n";
-    echo "---+---+---\n";
-    echo " {$board[1][0]} | {$board[1][1]} | {$board[1][2]} \n";
-    echo "---+---+---\n";
-    echo " {$board[2][0]} | {$board[2][1]} | {$board[2][2]} \n";
+    printf(" %s | %s | %s \n", ...$board[0]);
+    printf("---+---+---\n");
+    printf(" %s | %s | %s \n", ...$board[1]);
+    printf("---+---+---\n");
+    printf(" %s | %s | %s \n", ...$board[2]);
 }
 
 function checkBoard(array $board): int
