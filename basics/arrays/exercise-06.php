@@ -16,6 +16,10 @@ class Game
 {
     private const MAX_CONSECUTIVE_GUESSES = 5;
 
+    public const IN_PROGRESS = 0;
+    public const WORD_REVEALED = 1;
+    public const TOO_MANY_GUESSES = 2;
+
     private array $words;
     private string $word;
     private array $characters;
@@ -100,18 +104,15 @@ class Game
 
     public function status(): int
     {
-        // The word is revealed
         if (!in_array(' _', array_values($this->characters))) {
-            return 1;
+            return self::WORD_REVEALED;
         }
 
-        // The game is lost
         if ($this->repeatedMisses >= self::MAX_CONSECUTIVE_GUESSES) {
-            return 2;
+            return self::TOO_MANY_GUESSES;
         }
 
-        // Game in progress
-        return 0;
+        return self::IN_PROGRESS;
     }
 }
 
@@ -125,8 +126,8 @@ while (true) {
     echo 'Misses: ' . implode($game->getMisses()) . PHP_EOL;
 
     // Check game termination conditions
-    if ($game->status() > 0) {
-        if ($game->status() === 2) {
+    if ($game->status() !== Game::IN_PROGRESS) {
+        if ($game->status() === Game::TOO_MANY_GUESSES) {
             echo 'You lost! The word was: ' . $game->getWord() . PHP_EOL;
         } else {
             echo "YOU GOT IT!\n";
