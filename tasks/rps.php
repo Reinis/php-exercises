@@ -6,7 +6,7 @@ $moves = [
     2 => '✌'
 ];
 
-$play = array_rand(array_keys($moves));
+$play = array_rand($moves);
 
 echo <<<EOL
 Make your move!
