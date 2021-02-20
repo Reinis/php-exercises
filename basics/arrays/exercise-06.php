@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
 const WORD_FILE_NAME = 'words_alpha.txt';
-const MAX_CONSECUTIVE_GUESSES = 5;
 
 $validResponses = ['again', 'a', 'quit', 'q'];
 
@@ -12,37 +11,123 @@ if ($words === false) {
     exit(1);
 }
 
-function makeTranslationTable(string $word): array
-{
-    $characters = [];
 
-    foreach (str_split($word) as $char) {
-        $characters[$char] = ' _';
+class Game
+{
+    private const MAX_CONSECUTIVE_GUESSES = 5;
+
+    private array $words;
+    private string $word;
+    private array $characters;
+    private array $guessed = [];
+    private array $misses = [];
+    private int $repeatedMisses = 0;
+
+    public function __construct(array $words)
+    {
+        $this->words = $words;
+        $this->reset();
     }
 
-    return $characters;
+    public function reset()
+    {
+        $this->word = $this->words[array_rand($this->words)];
+        $this->makeTranslationTable();
+        $this->guessed = [];
+        $this->misses = [];
+        $this->repeatedMisses = 0;
+    }
+
+    private function makeTranslationTable(): void
+    {
+        $this->characters = [];
+
+        foreach (str_split($this->word) as $char) {
+            $this->characters[$char] = ' _';
+        }
+    }
+
+    public function getWord(): string
+    {
+        return $this->word;
+    }
+
+    public function getTranslationTable(): array
+    {
+        return $this->characters;
+    }
+
+    public function getMisses(): array
+    {
+        return $this->misses;
+    }
+
+    public function haveGuessed(string $guess): bool
+    {
+        return in_array($guess, $this->guessed);
+    }
+
+    public function makeGuess(string $guess): void
+    {
+        $this->addGuessed($guess);
+
+        if (preg_match('/' . $guess . '/', $this->word) === 1) {
+            $this->updateTranslationTable($guess);
+            $this->repeatedMisses = 0;
+        } elseif (preg_match('/' . $guess . '/', $this->word) === 0) {
+            $this->addMisses($guess);
+            $this->repeatedMisses++;
+        } else {
+            echo "Error: Character match failed!\n";
+            exit(1);
+        }
+    }
+
+    private function addGuessed(string $guess): void
+    {
+        $this->guessed[] = $guess;
+    }
+
+    private function updateTranslationTable(string $char): void
+    {
+        $this->characters[$char] = " $char";
+    }
+
+    private function addMisses(string $miss): void
+    {
+        $this->misses[] = $miss;
+    }
+
+    public function status(): int
+    {
+        // The word is revealed
+        if (!in_array(' _', array_values($this->characters))) {
+            return 1;
+        }
+
+        // The game is lost
+        if ($this->repeatedMisses >= self::MAX_CONSECUTIVE_GUESSES) {
+            return 2;
+        }
+
+        // Game in progress
+        return 0;
+    }
 }
 
 // Set up the game
-$word = $words[array_rand($words)];
-$word = $words[count($words) - 1];
-$characters = makeTranslationTable($word);
-
-$misses = [];
-$guessed = [];
-$repeatedMisses = 0;
+$game = new Game($words);
 
 // Begin
 while (true) {
     echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
-    echo 'Word: ' . strtr($word, $characters) . PHP_EOL;
-    echo 'Misses: ' . implode($misses) . PHP_EOL;
+    echo 'Word: ' . strtr($game->getWord(), $game->getTranslationTable()) . PHP_EOL;
+    echo 'Misses: ' . implode($game->getMisses()) . PHP_EOL;
 
     // Check game termination conditions
-    if (!in_array(' _', array_values($characters)) or $repeatedMisses >= MAX_CONSECUTIVE_GUESSES) {
-        if ($repeatedMisses >= MAX_CONSECUTIVE_GUESSES) {
-            echo "You lost! The word was: {$word}\n";
-            $repeatedMisses = 0;
+    if ($game->status() > 0) {
+        if ($game->status() === 2) {
+            echo 'You lost! The word was: ' . $game->getWord() . PHP_EOL;
         } else {
             echo "YOU GOT IT!\n";
         }
@@ -52,12 +137,7 @@ while (true) {
         } while (!in_array($response, $validResponses));
 
         if ($response[0] === 'a') {
-            $word = $words[array_rand($words)];
-            $characters = makeTranslationTable($word);
-
-            $misses = [];
-            $guessed = [];
-
+            $game->reset();
             continue;
         } else {
             break;
@@ -66,18 +146,7 @@ while (true) {
 
     do {
         $guess = trim(readline('Guess: '));
-    } while (!ctype_lower($guess) or strlen($guess) !== 1 or in_array($guess, $guessed));
+    } while (!ctype_lower($guess) or strlen($guess) !== 1 or $game->haveGuessed($guess));
 
-    $guessed[] = $guess;
-
-    if (preg_match('/' . $guess . '/', $word) === 1) {
-        $characters[$guess] = " $guess";
-        $repeatedMisses = 0;
-    } elseif (preg_match('/' . $guess . '/', $word) === 0) {
-        $misses[] = $guess;
-        $repeatedMisses++;
-    } else {
-        echo "Error: Character match failed!\n";
-        exit(1);
-    }
+    $game->makeGuess($guess);
 }
