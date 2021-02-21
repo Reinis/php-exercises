@@ -23,7 +23,9 @@
 $number = random_int(1, 100);
 
 echo "I'm thinking of a number in range 1–100. Try to guess it." . PHP_EOL;
-$guess = readline('> ');
+do {
+    $guess = filter_var(readline('-> '), FILTER_VALIDATE_INT);
+} while ($guess === false);
 
 if ($number > $guess) {
     echo 'Sorry, you are too low. I was thinking ' . $number . PHP_EOL;
