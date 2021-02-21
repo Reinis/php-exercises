@@ -13,4 +13,4 @@ while ($start <= $end) {
     $start++;
 };
 
-echo "!{$end} = " . $product . PHP_EOL;
+echo "{$end}! = " . $product . PHP_EOL;
