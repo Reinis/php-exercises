@@ -8,6 +8,11 @@ $board = [
 
 $players = ['X', 'O'];
 
+const GAME_IN_PROGRESS = -1;
+const GAME_WINNER_X = 0;
+const GAME_WINNER_O = 1;
+const GAME_IS_TIE = 2;
+
 function displayBoard(array $board): void
 {
     printf(" %s | %s | %s \n", ...$board[0]);
@@ -23,9 +28,9 @@ function checkBoard(array $board): int
     foreach ($board as $row) {
         if (count(array_unique($row)) === 1) {
             if (end($row) === 'X') {
-                return 0;
+                return GAME_WINNER_X;
             } elseif (end($row) === 'O') {
-                return 1;
+                return GAME_WINNER_O;
             }
         }
     }
@@ -34,9 +39,9 @@ function checkBoard(array $board): int
     foreach (array_map(null, ...$board) as $column) {
         if (count(array_unique($column)) === 1) {
             if (end($column) === 'X') {
-                return 0;
+                return GAME_WINNER_X;
             } elseif (end($column) === 'O') {
-                return 1;
+                return GAME_WINNER_O;
             }
         }
     }
@@ -50,20 +55,19 @@ function checkBoard(array $board): int
     foreach ($diagonals as $diagonal) {
         if (count(array_unique($diagonal)) === 1) {
             if (end($diagonal) === 'X') {
-                return 0;
+                return GAME_WINNER_X;
             } elseif (end($diagonal) === 'O') {
-                return 1;
+                return GAME_WINNER_O;
             }
         }
     }
 
     // Check for tie
     if (!in_array(' ', array_merge(...$board))) {
-        return 2;
+        return GAME_IS_TIE;
     }
 
-    // Game in progress
-    return -1;
+    return GAME_IN_PROGRESS;
 }
 
 displayBoard($board);
@@ -97,15 +101,15 @@ while (true) {
     displayBoard($board);
 
     switch (checkBoard($board)) {
-        case -1:
+        case GAME_IN_PROGRESS:
             // Next move
             $currentPlayer = abs($currentPlayer - 1);
             break;
-        case 0:
-        case 1:
+        case GAME_WINNER_X:
+        case GAME_WINNER_O:
             echo "The game was won by '{$players[$currentPlayer]}'.\n";
             exit(0);
-        case 2:
+        case GAME_IS_TIE:
             echo "The game is a tie.\n";
             exit(0);
         default:
