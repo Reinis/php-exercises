@@ -32,9 +32,9 @@ class MenuItem
 }
 
 $menu = [
-    new MenuItem('latte', 150),
-    new MenuItem('black', 180),
-    new MenuItem('tea', 120),
+    new MenuItem('Latte', 150),
+    new MenuItem('Black Coffee', 180),
+    new MenuItem('Tea', 120),
 ];
 
 $wallet = [
@@ -59,83 +59,98 @@ function countMoney(array $wallet): int
     return $sum;
 }
 
-echo 'Wallet: ';
-echo implode(
-    ', ',
-    array_map(
-        fn(int $nominal, int $number): string => "$nominal - $number",
-        array_keys($wallet),
-        $wallet
-    )
-);
-echo PHP_EOL;
+$moneyFormatter = numfmt_create('en_US', NumberFormatter::CURRENCY);
+const CURRENCY = 'USD';
 
-echo 'Wallet total: ' . countMoney($wallet) . PHP_EOL;
 
-$fmt = numfmt_create('en_US', NumberFormatter::CURRENCY);
+while (true) {
+    // Print the wallet
+    echo 'Wallet: ';
+    echo implode(
+        ', ',
+        array_map(
+            fn(int $nominal, int $number): string => "$nominal - $number",
+            array_keys($wallet),
+            $wallet
+        )
+    );
+    echo PHP_EOL;
 
-foreach ($menu as $index => $item) {
-    echo "{$index}. {$item->name} - "
-        . $fmt->formatCurrency($item->price / 100, 'USD')
+    echo 'Wallet total: ' . countMoney($wallet) . PHP_EOL;
+
+    // Print the menu
+    foreach ($menu as $index => $item) {
+        echo "{$index}. {$item->name} - "
+            . $moneyFormatter->formatCurrency($item->price / 100, CURRENCY)
+            . PHP_EOL;
+    }
+
+    // Ask for an order
+    do {
+        $choice = filter_var(readline('-> Choose your coffee: '), FILTER_VALIDATE_INT);
+    } while ($choice === false or !isset($menu[$choice]));
+
+    $order = $menu[$choice];
+
+    echo 'Your order: '
+        . $order->name
+        . ' - ' .
+        $moneyFormatter->formatCurrency($order->price / 100, CURRENCY)
         . PHP_EOL;
-}
 
-do {
-    $choice = filter_var(readline('-> Choose your coffee: '), FILTER_VALIDATE_INT);
-} while ($choice === false or !isset($menu[$choice]));
+    // Check if there is enough money in the wallet
+    if ($order->price > countMoney($wallet)) {
+        echo "You don't have enough money!\n";
+        exit(1);
+    }
 
-$order = $menu[$choice];
+    // Ask for the coins
+    $total = 0;
 
-echo 'Your order: '
-    . $order->name
-    . ' - ' .
-    $fmt->formatCurrency($order->price / 100, 'USD')
-    . PHP_EOL;
+    do {
+        echo 'Total: ' . $total . PHP_EOL;
+        $coins = preg_split('/[\s,]/', trim(readline('-> Insert the coins: ')));
 
-if ($order->price > countMoney($wallet)) {
-    echo "You don't have enough money!\n";
-    exit(1);
-}
+        foreach ($coins as $coin) {
+            $coin = filter_var($coin, FILTER_VALIDATE_INT);
 
-$total = 0;
+            if ($coin === false) {
+                continue;
+            }
 
-do {
-    echo 'Total: ' . $total . PHP_EOL;
-    $coins = preg_split('/[\s,]/', trim(readline('-> Insert the coins: ')));
-
-    foreach ($coins as $coin) {
-        $coin = filter_var($coin, FILTER_VALIDATE_INT);
-
-        if ($coin === false) {
-            continue;
+            if (isset($wallet[$coin]) and $wallet[$coin] > 0) {
+                $total += $coin;
+                $wallet[$coin]--;
+            }
         }
+    } while ($total < $order->price);
 
-        if (isset($wallet[$coin]) and $wallet[$coin] > 0) {
-            $total += $coin;
-            $wallet[$coin]--;
+    // Give the order
+    echo "Take your {$order->name}!\n";
+
+    // Return the remainder
+    if ($total !== $order->price) {
+        echo 'Return:' . PHP_EOL;
+
+        $reminder = $total - $order->price;
+
+        foreach (array_reverse(array_keys($wallet)) as $coin) {
+            if ($reminder < $coin) {
+                continue;
+            }
+
+            $num = intdiv($reminder, $coin);
+
+            echo "{$coin} - {$num}\n";
+
+            $reminder -= $coin * $num;
+            $wallet[$coin] += $num;
+
+            if ($reminder === 0) {
+                break;
+            }
         }
     }
-} while ($total < $order->price);
 
-echo "Take your coffee!\n";
-
-if ($total !== $order->price) {
-    echo 'Return:' . PHP_EOL;
-
-    $reminder = $total - $order->price;
-
-    foreach (array_reverse(array_keys($wallet)) as $coin) {
-        if ($reminder < $coin) {
-            continue;
-        }
-
-        $num = intdiv($reminder, $coin);
-
-        echo $coin . ' - ' . $num . PHP_EOL;
-
-        $reminder -= $coin * $num;
-        if ($reminder === 0) {
-            break;
-        }
-    }
+    echo PHP_EOL;
 }
