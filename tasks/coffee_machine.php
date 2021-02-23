@@ -19,6 +19,24 @@ declare(strict_types=1);
 // Wallet: 1 - 10, 2 - 50
 // Wallet total:
 
+class MenuItem
+{
+    public string $name;
+    public int $price;
+
+    public function __construct(string $name, int $price)
+    {
+        $this->name = $name;
+        $this->price = $price;
+    }
+}
+
+$menu = [
+    new MenuItem('latte', 150),
+    new MenuItem('black', 180),
+    new MenuItem('tea', 120),
+];
+
 $wallet = [
     1 => 10,
     2 => 15,
@@ -29,15 +47,6 @@ $wallet = [
     100 => 5,
     200 => 2
 ];
-
-echo 'Wallet: ';
-echo implode(', ',
-    array_map(fn(int $nominal, int $number): string => "$nominal - $number",
-        array_keys($wallet),
-        $wallet
-    )
-);
-echo PHP_EOL;
 
 function countMoney(array $wallet): int
 {
@@ -50,26 +59,24 @@ function countMoney(array $wallet): int
     return $sum;
 }
 
-echo 'Wallet total: ' . countMoney($wallet) . PHP_EOL;
+echo 'Wallet: ';
+echo implode(
+    ', ',
+    array_map(
+        fn(int $nominal, int $number): string => "$nominal - $number",
+        array_keys($wallet),
+        $wallet
+    )
+);
+echo PHP_EOL;
 
-$menu = [
-    [
-        'name' => 'latte',
-        'price' => 150
-    ], [
-        'name' => 'black',
-        'price' => 180
-    ], [
-        'name' => 'tea',
-        'price' => 120
-    ],
-];
+echo 'Wallet total: ' . countMoney($wallet) . PHP_EOL;
 
 $fmt = numfmt_create('en_US', NumberFormatter::CURRENCY);
 
 foreach ($menu as $index => $item) {
-    echo "{$index}. {$item['name']} - "
-        . $fmt->formatCurrency($item['price'] / 100, 'USD')
+    echo "{$index}. {$item->name} - "
+        . $fmt->formatCurrency($item->price / 100, 'USD')
         . PHP_EOL;
 }
 
@@ -77,13 +84,15 @@ do {
     $choice = filter_var(readline('-> Choose your coffee: '), FILTER_VALIDATE_INT);
 } while ($choice === false or !isset($menu[$choice]));
 
-echo 'Your choice: '
-    . $menu[$choice]['name']
+$order = $menu[$choice];
+
+echo 'Your order: '
+    . $order->name
     . ' - ' .
-    $fmt->formatCurrency($menu[$choice]['price'] / 100, 'USD')
+    $fmt->formatCurrency($order->price / 100, 'USD')
     . PHP_EOL;
 
-if ($menu[$choice]['price'] > countMoney($wallet)) {
+if ($order->price > countMoney($wallet)) {
     echo "You don't have enough money!\n";
     exit(1);
 }
@@ -106,13 +115,14 @@ do {
             $wallet[$coin]--;
         }
     }
-} while ($total < $menu[$choice]['price']);
+} while ($total < $order->price);
 
 echo "Take your coffee!\n";
-if ($total !== $menu[$choice]['price']) {
+
+if ($total !== $order->price) {
     echo 'Return:' . PHP_EOL;
 
-    $reminder = $total - $menu[$choice]['price'];
+    $reminder = $total - $order->price;
 
     foreach (array_reverse(array_keys($wallet)) as $coin) {
         if ($reminder < $coin) {
