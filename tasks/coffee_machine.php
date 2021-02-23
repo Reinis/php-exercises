@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // Coffee machine
 // Money (coins): 1, 2, 5, 10, 20, 50, 100, 200
 // -------
@@ -29,9 +31,12 @@ $wallet = [
 ];
 
 echo 'Wallet: ';
-foreach ($wallet as $key => $value) {
-    echo "$key - $value, ";
-}
+echo implode(', ',
+    array_map(fn(int $nominal, int $number): string => "$nominal - $number",
+        array_keys($wallet),
+        $wallet
+    )
+);
 echo PHP_EOL;
 
 function countMoney(array $wallet): int
@@ -64,7 +69,7 @@ $fmt = numfmt_create('en_US', NumberFormatter::CURRENCY);
 
 foreach ($menu as $index => $item) {
     echo "{$index}. {$item['name']} - "
-        . $fmt->formatCurrency($item['price']/100, 'USD')
+        . $fmt->formatCurrency($item['price'] / 100, 'USD')
         . PHP_EOL;
 }
 
@@ -75,7 +80,7 @@ do {
 echo 'Your choice: '
     . $menu[$choice]['name']
     . ' - ' .
-    $fmt->formatCurrency($menu[$choice]['price']/100, 'USD')
+    $fmt->formatCurrency($menu[$choice]['price'] / 100, 'USD')
     . PHP_EOL;
 
 if ($menu[$choice]['price'] > countMoney($wallet)) {
