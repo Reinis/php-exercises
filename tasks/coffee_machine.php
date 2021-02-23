@@ -118,7 +118,8 @@ if ($total !== $menu[$choice]['price']) {
         if ($reminder < $coin) {
             continue;
         }
-        $num = ($reminder - $reminder % $coin) / $coin;
+
+        $num = intdiv($reminder, $coin);
 
         echo $coin . ' - ' . $num . PHP_EOL;
 
