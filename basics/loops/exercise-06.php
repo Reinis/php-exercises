@@ -35,9 +35,20 @@ class AsciiFigure
 {
     private const STEP_SIZE = 4;
 
-    public function draw(): void
+    public function run(): void
     {
-        $size = 5;
+        do {
+            $size = filter_var(
+                readline('-> Size of the drawing: '),
+                FILTER_VALIDATE_INT
+            );
+        } while ($size === false || $size <= 0);
+
+        $this->draw($size);
+    }
+
+    public function draw(int $size): void
+    {
         $width = ($size - 1) * self::STEP_SIZE;
 
         for ($i = 0; $i < $size; $i++) {
@@ -50,4 +61,4 @@ class AsciiFigure
 }
 
 $program = new AsciiFigure();
-$program->draw();
+$program->run();
