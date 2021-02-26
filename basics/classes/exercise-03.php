@@ -39,6 +39,8 @@ namespace Car;
 
 class FuelGauge
 {
+    public const TANK_CAPACITY = 70;
+
     private int $fuel = 0;
 
     public function read(): int
@@ -48,7 +50,7 @@ class FuelGauge
 
     public function addFuel(): void
     {
-        if ($this->fuel < TANK_CAPACITY) {
+        if ($this->fuel < self::TANK_CAPACITY) {
             $this->fuel++;
         }
     }
@@ -104,8 +106,8 @@ function drawProgress(int $counter, int $fuel, int $mileage = 0): void
         . GO_ONE_LINE_UP
         . 'Fuel: '
         . str_repeat('█', $fuel)
-        . str_repeat(' ', TANK_CAPACITY - $fuel)
-        . sprintf(' %2d/%2d ', $fuel, TANK_CAPACITY)
+        . str_repeat(' ', FuelGauge::TANK_CAPACITY - $fuel)
+        . sprintf(' %2d/%2d ', $fuel, FuelGauge::TANK_CAPACITY)
         . $spinner[$counter % 4]
         . PHP_EOL
         . sprintf('Mileage: %6dkm', $mileage);
@@ -116,7 +118,6 @@ const DISABLE_CURSOR = "\e[?25l";
 const ENABLE_CURSOR = "\e[?25h";
 const GO_TO_LINE_START = "\r";
 const GO_ONE_LINE_UP = "\e[1A";
-const TANK_CAPACITY = 70;
 
 
 $fuelGauge = new FuelGauge();
@@ -125,7 +126,7 @@ $odometer = new Odometer($fuelGauge);
 // Fill the tank
 echo DISABLE_CURSOR;
 
-for ($i = 0; $i < TANK_CAPACITY + 30; $i++) {
+for ($i = 0; $i < FuelGauge::TANK_CAPACITY + 30; $i++) {
     $fuelGauge->addFuel();
     usleep(100000);
 
