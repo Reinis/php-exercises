@@ -66,7 +66,7 @@ class FuelGauge
 
 class Odometer
 {
-    private const COUNTER_LIMIT = 999999;
+    private const COUNTER_LIMIT = 999_999;
     private const FUEL_ECONOMY = 10;
 
     private int $mileage = 0;
@@ -128,15 +128,15 @@ echo DISABLE_CURSOR;
 
 for ($i = 0; $i < FuelGauge::TANK_CAPACITY + 30; $i++) {
     $fuelGauge->addFuel();
-    usleep(100000);
+    usleep(100_000);
 
     drawProgress($i, $fuelGauge->read());
 }
 
 // Drive
-while ($fuelGauge->read() !== 0) {
+while ($fuelGauge->read() > 0) {
     $odometer->increaseMileage();
-    usleep(10000);
+    usleep(10_000);
 
     $mileage = $odometer->read();
     drawProgress($mileage, $fuelGauge->read(), $mileage);
