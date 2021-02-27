@@ -32,7 +32,7 @@ $game->init();
 while ($player->getAmount() >= 10) {
 
     do {
-        echo CLEAR_LINE . GO_TO_LINE_START . ENABLE_CURSOR;
+        echo CLEAR_LINE . GO_TO_LINE_START;
         $bet = filter_var(
             readline("-> Bet: "),
             FILTER_VALIDATE_INT);
@@ -108,4 +108,6 @@ while ($player->getAmount() >= 10) {
             );
         }
     }
+
+    echo ENABLE_CURSOR;
 }
