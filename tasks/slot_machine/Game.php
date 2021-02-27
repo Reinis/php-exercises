@@ -71,7 +71,7 @@ class Game
         foreach ($rolls as $roll) {
             if (count(array_unique($roll)) === 1) {
                 if (end($roll) === array_key_first($this->elements)) {
-                    $this->bonus += 5;
+                    $this->bonus += self::NUMBER_OF_BONUS_GAMES;
                     continue;
                 }
 
@@ -87,7 +87,7 @@ class Game
         foreach ($diagonals as $diagonal) {
             if (count(array_unique($diagonal)) === 1) {
                 if (end($diagonal) === array_key_first($this->elements)) {
-                    $this->bonus += 5;
+                    $this->bonus += self::NUMBER_OF_BONUS_GAMES;
                     continue;
                 }
 
