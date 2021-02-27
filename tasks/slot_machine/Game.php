@@ -21,6 +21,7 @@ class Game
     private array $elementsUnique;
     private int $prize = 0;
     private int $bonus = 0;
+    private array $rolls = [];
     private Player $player;
 
     public function __construct(Player $player)
@@ -51,9 +52,10 @@ class Game
         );
     }
 
-    public function play(bool $bonusGame = false): array
+    public function play(bool $bonusGame = false): void
     {
         $rolls = [];
+        $this->prize = 0;
 
         if ($bonusGame && $this->bonus > 0) {
             $this->bonus--;
@@ -67,8 +69,9 @@ class Game
             }
         }
 
+        $this->rolls = $rolls;
+
         // Check for win
-        $this->prize = 0;
         foreach ($rolls as $roll) {
             if (count(array_unique($roll)) === 1) {
                 if (end($roll) === array_key_first($this->elements)) {
@@ -97,8 +100,6 @@ class Game
                 $this->addPrize($this->elements[end($diagonal)]);
             }
         }
-
-        return $rolls;
     }
 
     private function roll(bool $bonusGame = false): string
@@ -123,5 +124,10 @@ class Game
     public function getPrize(): int
     {
         return $this->prize;
+    }
+
+    public function getRolls(): array
+    {
+        return $this->rolls;
     }
 }

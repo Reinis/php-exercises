@@ -8,6 +8,15 @@ require_once 'Game.php';
 require_once 'Player.php';
 
 
+function displayRolls(Game $game): void
+{
+    for ($j = 0; $j < Game::NUMBER_OF_SLOTS; $j++) {
+        printf("%s %s %s\n", ...$game->getRolls()[$j]);
+        sleep(1);
+    }
+}
+
+
 const DISABLE_CURSOR = "\e[?25l";
 const ENABLE_CURSOR = "\e[?25h";
 const GO_TO_LINE_START = "\r";
@@ -15,6 +24,7 @@ const GO_ONE_LINE_UP = "\e[1A";
 const GO_FOUR_LINES_UP = "\e[4A";
 const GO_FIVE_LINES_UP = "\e[5A";
 const CLEAR_LINE = "\e[2K";
+
 
 $player = new Player();
 $game = new Game($player);
@@ -53,14 +63,10 @@ while ($player->getAmount() >= 10) {
     $game->init();
     echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
     sleep(1);
-    $rolls = $game->play();
+    $game->play();
     $prize = $game->getPrize();
 
-    // Display the rolls
-    for ($i = 0; $i < Game::NUMBER_OF_SLOTS; $i++) {
-        printf("%s %s %s\n", ...$rolls[$i]);
-        sleep(1);
-    }
+    displayRolls($game);
 
     // Apply the multiplier
     $prize *= $bet / 10;
@@ -83,14 +89,10 @@ while ($player->getAmount() >= 10) {
             echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
             sleep(1);
 
-            $rolls = $game->play(true);
+            $game->play(true);
             $prize = $game->getPrize();
 
-            // Display the rolls
-            for ($j = 0; $j < Game::NUMBER_OF_SLOTS; $j++) {
-                printf("%s %s %s\n", ...$rolls[$j]);
-                sleep(1);
-            }
+            displayRolls($game);
 
             // Apply the multiplier
             $prize *= $bet / 10;
