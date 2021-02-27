@@ -32,7 +32,7 @@ $game->init();
 while ($player->getAmount() >= 10) {
 
     do {
-        echo CLEAR_LINE . ENABLE_CURSOR;
+        echo CLEAR_LINE . GO_TO_LINE_START . ENABLE_CURSOR;
         $bet = filter_var(
             readline("-> Bet: "),
             FILTER_VALIDATE_INT);
@@ -42,7 +42,8 @@ while ($player->getAmount() >= 10) {
     // Check available money
     if ($bet > $player->getAmount()) {
         echo GO_ONE_LINE_UP . CLEAR_LINE;
-        echo "You don't have enough money for the bet!\n";
+        echo "You don't have enough money for the bet!";
+        sleep(2);
         continue;
     }
 
