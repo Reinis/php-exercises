@@ -78,8 +78,7 @@ class Game
                     continue;
                 }
 
-                // Add to prize
-                $this->prize += $this->elements[end($roll)];
+                $this->addPrize($this->elements[end($roll)]);
             }
         }
 
@@ -90,13 +89,12 @@ class Game
 
         foreach ($diagonals as $diagonal) {
             if (count(array_unique($diagonal)) === 1) {
-                if (end($roll) === array_key_first($this->elements)) {
+                if (end($diagonal) === array_key_first($this->elements)) {
                     $this->bonus += 5;
                     continue;
                 }
 
-                // Add to prize
-                $this->prize += $this->elements[end($diagonal)];
+                $this->addPrize($this->elements[end($diagonal)]);
             }
         }
 
@@ -110,6 +108,11 @@ class Game
         }
 
         return $this->elementsExpanded[array_rand($this->elementsExpanded)];
+    }
+
+    private function addPrize(int $prize): void
+    {
+        $this->prize += $prize;
     }
 
     public function getBonus(): int
