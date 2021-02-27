@@ -123,4 +123,14 @@ class Game
     {
         return $this->player->getAmount();
     }
+
+    public function setAmount(int $amount): void
+    {
+        $this->player->setAmount($amount);
+    }
+
+    public function setBet(int $bet): void
+    {
+        $this->player->setBet($bet);
+    }
 }

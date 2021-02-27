@@ -52,8 +52,7 @@ const GO_FIVE_LINES_UP = "\e[5A";
 const CLEAR_LINE = "\e[2K";
 
 
-$player = new Player();
-$game = new Game($player);
+$game = new Game(new Player());
 
 do {
     $amount = filter_var(
@@ -62,10 +61,10 @@ do {
     );
 } while ($amount === false || $amount < 10 || $amount % 10 !== 0);
 
-$player->setAmount($amount);
+$game->setAmount($amount);
 initRolls($game);
 
-while ($player->getAmount() >= 10) {
+while ($game->getAmount() >= 10) {
     do {
         echo CLEAR_LINE . GO_TO_LINE_START;
         $bet = filter_var(
@@ -75,14 +74,14 @@ while ($player->getAmount() >= 10) {
     } while ($bet === false || $bet < 10 || $bet % 10 !== 0);
 
     // Check available money
-    if ($bet > $player->getAmount()) {
+    if ($bet > $game->getAmount()) {
         echo GO_ONE_LINE_UP . CLEAR_LINE;
         echo "You don't have enough money for the bet!";
         sleep(2);
         continue;
     }
 
-    $player->setBet($bet);
+    $game->setBet($bet);
 
     echo GO_TO_LINE_START . GO_FIVE_LINES_UP . DISABLE_CURSOR;
 
