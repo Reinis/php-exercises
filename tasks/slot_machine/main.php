@@ -55,7 +55,14 @@ while ($player->getAmount() >= 10) {
     $game->init();
     echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
     sleep(1);
-    $prize = $game->play();
+    $rolls = $game->play();
+    $prize = $game->getPrize();
+
+    // Display the rolls
+    for ($i = 0; $i < 3; $i++) {
+        printf("%s %s %s\n", ...$rolls[$i]);
+        sleep(1);
+    }
 
     // Apply the multiplier
     $prize *= $bet / 10;
@@ -72,14 +79,20 @@ while ($player->getAmount() >= 10) {
     // Check for bonus games
     while ($game->getBonus() > 0) {
         // Autoplay five times bonus games
-        $prize = 0;
         for ($i = 0; $i < Game::NUMBER_OF_BONUS_GAMES; $i++) {
             echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
             $game->init();
             echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
             sleep(1);
 
-            $prize = $game->play(true);
+            $rolls = $game->play(true);
+            $prize = $game->getPrize();
+
+            // Display the rolls
+            for ($j = 0; $j < 3; $j++) {
+                printf("%s %s %s\n", ...$rolls[$j]);
+                sleep(1);
+            }
 
             // Apply the multiplier
             $prize *= $bet / 10;

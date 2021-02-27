@@ -50,7 +50,7 @@ class Game
         );
     }
 
-    public function play(bool $bonusGame = false): int
+    public function play(bool $bonusGame = false): array
     {
         $rolls = [];
 
@@ -64,9 +64,6 @@ class Game
             for ($j = 0; $j < 3; $j++) {
                 $rolls[$i][] = $this->roll($bonusGame);
             }
-
-            printf("%s %s %s\n", ...$rolls[$i]);
-            sleep(1);
         }
 
         // Check for win
@@ -98,7 +95,7 @@ class Game
             }
         }
 
-        return $this->prize;
+        return $rolls;
     }
 
     private function roll(bool $bonusGame = false): string
@@ -118,5 +115,10 @@ class Game
     public function getBonus(): int
     {
         return $this->bonus;
+    }
+
+    public function getPrize(): int
+    {
+        return $this->prize;
     }
 }
