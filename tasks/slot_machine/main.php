@@ -61,7 +61,12 @@ while ($player->getAmount() >= 10) {
 
     $player->reward($prize);
 
-    printf("Prize: %4d\n", $prize);
+    printf(
+        "Prize: %4d bonus: %4d available: %4d\n",
+        $prize,
+        $game->getBonus(),
+        $player->getAmount()
+    );
 
     // Check for bonus games
     while ($game->getBonus() > 0) {
@@ -72,10 +77,21 @@ while ($player->getAmount() >= 10) {
             $game->init();
             echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
             sleep(1);
-            $prize += $game->play(true);
+
+            $prize = $game->play(true);
+
+            // Apply the multiplier
+            $prize *= $bet / 10;
+            $player->reward($prize);
             $bonus = $game->getBonus();
+
             echo CLEAR_LINE;
-            printf("Prize: %4d bonus: %4d available: %4d\n", $prize, $bonus, $player->getAmount());
+            printf(
+                "Prize: %4d bonus: %4d available: %4d\n",
+                $prize,
+                $bonus,
+                $player->getAmount()
+            );
         }
     }
 }
