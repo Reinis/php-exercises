@@ -8,6 +8,7 @@ class Game
 {
     public const NUMBER_OF_BONUS_GAMES = 5;
     public const NUMBER_OF_SLOTS = 3;
+    public const PLACEHOLDER_ELEMENT = '🧺';
 
     private array $elements = [
         '⭐' => 0,
@@ -36,20 +37,6 @@ class Game
         $elements = ['🍎', '🍍', '🍇', '🍉', '🍒'];
         $this->elementsExpanded = array_merge($elements, $star);
         $this->elementsUnique = array_unique($this->elementsExpanded);
-    }
-
-    public function init(): void
-    {
-        for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
-            printf("%s %s %s\n", '🧺', '🧺', '🧺');
-        }
-
-        printf(
-            "Prize: %4d bonus: %4d available: %4d\n",
-            $this->prize,
-            $this->bonus,
-            $this->player->getAmount()
-        );
     }
 
     public function play(bool $bonusGame = false): void
@@ -129,5 +116,10 @@ class Game
     public function getRolls(): array
     {
         return $this->rolls;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->player->getAmount();
     }
 }

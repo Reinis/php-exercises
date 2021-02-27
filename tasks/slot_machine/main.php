@@ -8,6 +8,28 @@ require_once 'Game.php';
 require_once 'Player.php';
 
 
+function initRolls(Game $game): void
+{
+    for ($i = 0; $i < Game::NUMBER_OF_SLOTS; $i++) {
+        printf(
+            "%s %s %s\n",
+            ...array_fill(
+                0,
+                Game::NUMBER_OF_SLOTS,
+                Game::PLACEHOLDER_ELEMENT
+            )
+        );
+    }
+
+    printf(
+        "Prize: %4d bonus: %4d available: %4d\n",
+        $game->getPrize(),
+        $game->getBonus(),
+        $game->getAmount()
+    );
+}
+
+
 function displayRolls(Game $game): void
 {
     for ($j = 0; $j < Game::NUMBER_OF_SLOTS; $j++) {
@@ -37,7 +59,7 @@ do {
 } while ($amount === false || $amount < 10 || $amount % 10 !== 0);
 
 $player->setAmount($amount);
-$game->init();
+initRolls($game);
 
 while ($player->getAmount() >= 10) {
     do {
@@ -60,7 +82,7 @@ while ($player->getAmount() >= 10) {
     // Deduct the bet
     $player->deduct($bet);
 
-    $game->init();
+    initRolls($game);
     echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
     sleep(1);
     $game->play();
@@ -85,7 +107,7 @@ while ($player->getAmount() >= 10) {
         // Autoplay five times bonus games
         for ($i = 0; $i < Game::NUMBER_OF_BONUS_GAMES; $i++) {
             echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
-            $game->init();
+            initRolls($game);
             echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
             sleep(1);
 
