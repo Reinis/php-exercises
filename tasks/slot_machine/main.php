@@ -16,7 +16,6 @@ function printSlots(array $slots): void
     );
 }
 
-
 function initRolls(Game $game): void
 {
     for ($i = 0; $i < Game::NUMBER_OF_SLOTS; $i++) {
@@ -32,7 +31,6 @@ function initRolls(Game $game): void
         $game->getAmount()
     );
 }
-
 
 function displayRolls(Game $game): void
 {
@@ -72,7 +70,8 @@ while ($player->getAmount() >= 10) {
         echo CLEAR_LINE . GO_TO_LINE_START;
         $bet = filter_var(
             readline("-> Bet: "),
-            FILTER_VALIDATE_INT);
+            FILTER_VALIDATE_INT
+        );
     } while ($bet === false || $bet < 10 || $bet % 10 !== 0);
 
     // Check available money
