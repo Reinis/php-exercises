@@ -82,34 +82,28 @@ while ($player->getAmount() >= 10) {
         continue;
     }
 
-    echo GO_TO_LINE_START . GO_FIVE_LINES_UP . DISABLE_CURSOR;
+    $player->setBet($bet);
 
-    // Deduct the bet
-    $player->deduct($bet);
+    echo GO_TO_LINE_START . GO_FIVE_LINES_UP . DISABLE_CURSOR;
 
     initRolls($game);
     echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
     sleep(1);
+
     $game->play();
-    $prize = $game->getPrize();
 
     displayRolls($game);
 
-    // Apply the multiplier
-    $prize *= $bet / 10;
-
-    $player->reward($prize);
-
     printf(
         "Prize: %4d bonus: %4d available: %4d\n",
-        $prize,
+        $game->getPrize(),
         $game->getBonus(),
-        $player->getAmount()
+        $game->getAmount()
     );
 
     // Check for bonus games
     while ($game->getBonus() > 0) {
-        // Autoplay five times bonus games
+        // Autoplay bonus games
         for ($i = 0; $i < Game::NUMBER_OF_BONUS_GAMES; $i++) {
             echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
             initRolls($game);
@@ -117,21 +111,15 @@ while ($player->getAmount() >= 10) {
             sleep(1);
 
             $game->play(true);
-            $prize = $game->getPrize();
 
             displayRolls($game);
-
-            // Apply the multiplier
-            $prize *= $bet / 10;
-            $player->reward($prize);
-            $bonus = $game->getBonus();
 
             echo CLEAR_LINE;
             printf(
                 "Prize: %4d bonus: %4d available: %4d\n",
-                $prize,
-                $bonus,
-                $player->getAmount()
+                $game->getPrize(),
+                $game->getBonus(),
+                $game->getAmount()
             );
         }
     }

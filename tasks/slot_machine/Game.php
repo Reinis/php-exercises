@@ -8,6 +8,8 @@ class Game
     public const NUMBER_OF_SLOTS = 3;
     public const PLACEHOLDER_ELEMENT = '🧺';
 
+    private const REWARD_FACTOR = 10;
+
     private array $elements = [
         '⭐' => 0,
         '🍎' => 15,
@@ -98,7 +100,8 @@ class Game
 
     private function addPrize(int $prize): void
     {
-        $this->prize += $prize;
+        $this->prize += $prize * $this->player->getBet() / self::REWARD_FACTOR;
+        $this->player->reward($this->prize);
     }
 
     public function getBonus(): int

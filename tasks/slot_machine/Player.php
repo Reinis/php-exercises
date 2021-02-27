@@ -5,6 +5,7 @@ namespace SlotMachine;
 class Player
 {
     private int $amount = 0;
+    private int $bet = 0;
 
     public function getAmount(): int
     {
@@ -16,13 +17,19 @@ class Player
         $this->amount = $amount;
     }
 
-    public function deduct(int $amount): void
-    {
-        $this->amount -= $amount;
-    }
-
     public function reward(int $amount): void
     {
         $this->amount += $amount;
+    }
+
+    public function getBet(): int
+    {
+        return $this->bet;
+    }
+
+    public function setBet(int $bet): void
+    {
+        $this->bet = $bet;
+        $this->amount -= $bet;
     }
 }
