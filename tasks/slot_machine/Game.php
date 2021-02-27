@@ -80,10 +80,12 @@ class Game
             }
         }
 
-        $diagonals = [
-            [$rolls[0][0], $rolls[1][1], $rolls[2][2]],
-            [$rolls[0][2], $rolls[1][1], $rolls[2][0]]
-        ];
+        $diagonals = [[], []];
+
+        for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
+            $diagonals[0][] = $rolls[$i][$i];
+            $diagonals[1][] = $rolls[$i][self::NUMBER_OF_SLOTS - $i - 1];
+        }
 
         foreach ($diagonals as $diagonal) {
             if (count(array_unique($diagonal)) === 1) {
