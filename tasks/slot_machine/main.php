@@ -16,14 +16,8 @@ function printSlots(array $slots): void
     );
 }
 
-function initRolls(Game $game): void
+function printStatusLine(Game $game)
 {
-    for ($i = 0; $i < Game::NUMBER_OF_SLOTS; $i++) {
-        printSlots(
-            array_fill(0, Game::NUMBER_OF_SLOTS, Game::PLACEHOLDER_ELEMENT)
-        );
-    }
-
     printf(
         "Prize: %4d bonus: %4d available: %4d\n",
         $game->getPrize(),
@@ -32,14 +26,34 @@ function initRolls(Game $game): void
     );
 }
 
+function initRolls(Game $game, bool $moveCursor = true): void
+{
+    if ($moveCursor) {
+        echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
+    }
+
+    for ($i = 0; $i < Game::NUMBER_OF_SLOTS; $i++) {
+        printSlots(
+            array_fill(0, Game::NUMBER_OF_SLOTS, Game::PLACEHOLDER_ELEMENT)
+        );
+    }
+
+    printStatusLine($game);
+}
+
 function displayRolls(Game $game): void
 {
     $rolls = $game->getRolls();
+
+    echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
+    sleep(1);
 
     for ($j = 0; $j < Game::NUMBER_OF_SLOTS; $j++) {
         printSlots($rolls[$j]);
         sleep(1);
     }
+
+    printStatusLine($game);
 }
 
 
@@ -61,7 +75,7 @@ do {
 } while ($amount === false || $amount < 10 || $amount % 10 !== 0);
 
 $game->setAmount($amount);
-initRolls($game);
+initRolls($game, false);
 
 while ($game->getAmount() >= 10 || $game->getBonus() !== 0) {
     if ($game->getBonus() === 0) {
@@ -72,9 +86,9 @@ while ($game->getAmount() >= 10 || $game->getBonus() !== 0) {
                 readline("-> Bet: "),
                 FILTER_VALIDATE_INT
             );
-        } while ($bet === false || $bet < 10 || $bet % 10 !== 0);
 
-        echo GO_ONE_LINE_UP;
+            echo GO_ONE_LINE_UP;
+        } while ($bet === false || $bet < 10 || $bet % 10 !== 0);
 
         // Check available money
         if ($bet > $game->getAmount()) {
@@ -87,22 +101,13 @@ while ($game->getAmount() >= 10 || $game->getBonus() !== 0) {
         $game->setBet($bet);
     }
 
-    echo GO_TO_LINE_START . GO_FOUR_LINES_UP . DISABLE_CURSOR;
+    echo DISABLE_CURSOR;
 
     initRolls($game);
-    echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
-    sleep(1);
 
     $game->play($game->getBonus() > 0);
 
     displayRolls($game);
-
-    printf(
-        "Prize: %4d bonus: %4d available: %4d\n",
-        $game->getPrize(),
-        $game->getBonus(),
-        $game->getAmount()
-    );
 
     echo ENABLE_CURSOR;
 }
