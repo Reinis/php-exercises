@@ -30,14 +30,12 @@ $player->setAmount($amount);
 $game->init();
 
 while ($player->getAmount() >= 10) {
-
     do {
         echo CLEAR_LINE . GO_TO_LINE_START;
         $bet = filter_var(
             readline("-> Bet: "),
             FILTER_VALIDATE_INT);
     } while ($bet === false || $bet < 10 || $bet % 10 !== 0);
-
 
     // Check available money
     if ($bet > $player->getAmount()) {
@@ -59,7 +57,7 @@ while ($player->getAmount() >= 10) {
     $prize = $game->getPrize();
 
     // Display the rolls
-    for ($i = 0; $i < 3; $i++) {
+    for ($i = 0; $i < Game::NUMBER_OF_SLOTS; $i++) {
         printf("%s %s %s\n", ...$rolls[$i]);
         sleep(1);
     }
@@ -89,7 +87,7 @@ while ($player->getAmount() >= 10) {
             $prize = $game->getPrize();
 
             // Display the rolls
-            for ($j = 0; $j < 3; $j++) {
+            for ($j = 0; $j < Game::NUMBER_OF_SLOTS; $j++) {
                 printf("%s %s %s\n", ...$rolls[$j]);
                 sleep(1);
             }

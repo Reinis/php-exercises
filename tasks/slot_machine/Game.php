@@ -7,6 +7,7 @@ namespace SlotMachine;
 class Game
 {
     public const NUMBER_OF_BONUS_GAMES = 5;
+    public const NUMBER_OF_SLOTS = 3;
 
     private array $elements = [
         '⭐' => 0,
@@ -38,7 +39,7 @@ class Game
 
     public function init(): void
     {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
             printf("%s %s %s\n", '🧺', '🧺', '🧺');
         }
 
@@ -58,10 +59,10 @@ class Game
             $this->bonus--;
         }
 
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
             $rolls[] = [];
 
-            for ($j = 0; $j < 3; $j++) {
+            for ($j = 0; $j < self::NUMBER_OF_SLOTS; $j++) {
                 $rolls[$i][] = $this->roll($bonusGame);
             }
         }
