@@ -8,16 +8,20 @@ require_once 'Game.php';
 require_once 'Player.php';
 
 
+function printSlots(array $slots): void
+{
+    printf(
+        trim(str_repeat(" %s", Game::NUMBER_OF_SLOTS)) . "\n",
+        ...$slots
+    );
+}
+
+
 function initRolls(Game $game): void
 {
     for ($i = 0; $i < Game::NUMBER_OF_SLOTS; $i++) {
-        printf(
-            "%s %s %s\n",
-            ...array_fill(
-                0,
-                Game::NUMBER_OF_SLOTS,
-                Game::PLACEHOLDER_ELEMENT
-            )
+        printSlots(
+            array_fill(0, Game::NUMBER_OF_SLOTS, Game::PLACEHOLDER_ELEMENT)
         );
     }
 
@@ -32,8 +36,10 @@ function initRolls(Game $game): void
 
 function displayRolls(Game $game): void
 {
+    $rolls = $game->getRolls();
+
     for ($j = 0; $j < Game::NUMBER_OF_SLOTS; $j++) {
-        printf("%s %s %s\n", ...$game->getRolls()[$j]);
+        printSlots($rolls[$j]);
         sleep(1);
     }
 }
