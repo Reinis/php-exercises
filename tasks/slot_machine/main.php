@@ -13,10 +13,20 @@ require_once 'Constants.php';
 $game = new Game(new Player());
 
 do {
-    $amount = filter_var(
-        readline('-> Start amount (min 10, step 10): '),
-        FILTER_VALIDATE_INT
-    );
+    $input = readline('-> Start amount (min 10, step 10): ');
+    $amount = filter_var($input, FILTER_VALIDATE_INT);
+
+    if ($input === 'q') {
+        exit("Quitting. Good for you!\n");
+    }
+
+    if ($amount === false) {
+        displayErrorMessage("Invalid amount!");
+    } elseif ($amount < 10) {
+        displayErrorMessage("Amount too small!");
+    } elseif ($amount % 10 !== 0) {
+        displayErrorMessage("Has to be a multiple of 10!");
+    }
 } while ($amount === false || $amount < 10 || $amount % 10 !== 0);
 
 $game->setAmount($amount);
@@ -31,19 +41,25 @@ while ($game->getAmount() >= 0 || $game->getBonus() !== 0) {
             $bet = filter_var($input, FILTER_VALIDATE_INT);
 
             if ($input === 'q') {
-                exit("You receive " . $game->getAmount(). "!\n");
+                exit("You receive " . $game->getAmount() . "!\n");
             }
 
-            echo GO_ONE_LINE_UP;
+            if ($bet === false) {
+                displayErrorMessage("Invalid bet!");
+            } elseif ($bet < 10) {
+                displayErrorMessage("Bet too small!");
+            } elseif ($bet % 10 !== 0) {
+                displayErrorMessage("Bet has to be a multiple of 10!");
+            }
         } while ($bet === false || $bet < 10 || $bet % 10 !== 0);
 
         // Check available money
         if ($bet > $game->getAmount()) {
-            echo CLEAR_LINE;
-            echo "You don't have enough money for the bet!";
-            sleep(2);
+            displayErrorMessage("You don't have enough money for the bet!");
             continue;
         }
+
+        echo GO_ONE_LINE_UP;
 
         $game->setBet($bet);
     }

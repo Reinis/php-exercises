@@ -50,3 +50,11 @@ function displayRolls(Game $game): void
 
     printStatusLine($game);
 }
+
+function displayErrorMessage(string $text)
+{
+    echo GO_ONE_LINE_UP . CLEAR_LINE;
+    echo $text;
+    sleep(2);
+    echo CLEAR_LINE . GO_TO_LINE_START;
+}
