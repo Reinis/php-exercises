@@ -7,14 +7,7 @@ namespace SlotMachine;
 require_once 'Game.php';
 require_once 'Player.php';
 require_once 'Functions.php';
-
-
-const DISABLE_CURSOR = "\e[?25l";
-const ENABLE_CURSOR = "\e[?25h";
-const GO_TO_LINE_START = "\r";
-const GO_ONE_LINE_UP = "\e[1A";
-const GO_FOUR_LINES_UP = "\e[4A";
-const CLEAR_LINE = "\e[2K";
+require_once 'Constants.php';
 
 
 $game = new Game(new Player());
