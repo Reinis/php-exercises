@@ -10,15 +10,8 @@ class Game
 
     private const REWARD_FACTOR = 10;
 
-    private array $elements = [
-        '⭐' => 0,
-        '🍎' => 5,
-        '🍍' => 10,
-        '🍇' => 15,
-        '🍉' => 20,
-        '🍒' => 25,
-    ];
-    private array $elementCounts = [10, 0, 5, 3, 1, 1];
+    private Element $bonusElement;
+    private array $elements;
     private array $elementsExpanded = [];
     private array $elementsBonus;
     private int $prize = 0;
@@ -29,23 +22,30 @@ class Game
     public function __construct(Player $player)
     {
         $this->player = $player;
+        $this->bonusElement = new Element('⭐', 0, 10);
+        $this->elements = [
+            $this->bonusElement,
+            new Element('🍎', 5, 0),
+            new Element('🍍', 10, 5),
+            new Element('🍇', 15, 3),
+            new Element('🍉', 20, 1),
+            new Element('🍒', 25, 1),
+        ];
 
         // Control the chance of rolling a given element
-        $repeats = array_combine(array_keys($this->elements), $this->elementCounts);
-
-        foreach ($repeats as $element => $number) {
+        foreach ($this->elements as $element) {
             $this->elementsExpanded = array_merge(
                 $this->elementsExpanded,
-                array_fill(0, $number, $element)
+                array_fill(0, $element->getWeight(), $element)
             );
         }
 
         // Lower the chance to win another bonus in a bonus game
         $this->elementsBonus = array_filter(
             $this->elementsExpanded,
-            fn($element) => $element !== array_key_first($this->elements)
+            fn($element) => $element !== $this->bonusElement
         );
-        $this->elementsBonus[] = array_key_first($this->elements);
+        $this->elementsBonus[] = $this->bonusElement;
     }
 
     public function play(bool $bonusGame = false): void
@@ -70,12 +70,12 @@ class Game
         // Check for win
         foreach ($rolls as $roll) {
             if (count(array_unique($roll)) === 1) {
-                if (end($roll) === array_key_first($this->elements)) {
+                if (end($roll) === $this->bonusElement) {
                     $this->bonus += self::NUMBER_OF_BONUS_GAMES;
                     continue;
                 }
 
-                $this->addPrize($this->elements[end($roll)]);
+                $this->addPrize(end($roll)->getValue());
             }
         }
 
@@ -88,17 +88,17 @@ class Game
 
         foreach ($diagonals as $diagonal) {
             if (count(array_unique($diagonal)) === 1) {
-                if (end($diagonal) === array_key_first($this->elements)) {
+                if (end($diagonal) === $this->bonusElement) {
                     $this->bonus += self::NUMBER_OF_BONUS_GAMES;
                     continue;
                 }
 
-                $this->addPrize($this->elements[end($diagonal)]);
+                $this->addPrize(end($diagonal)->getValue());
             }
         }
     }
 
-    private function roll(bool $bonusGame = false): string
+    private function roll(bool $bonusGame = false): Element
     {
         if ($bonusGame) {
             return $this->elementsBonus[array_rand($this->elementsBonus)];

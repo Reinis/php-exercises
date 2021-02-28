@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SlotMachine;
 
+require_once 'Element.php';
 require_once 'Game.php';
 require_once 'Player.php';
 require_once 'Functions.php';
