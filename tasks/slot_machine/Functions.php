@@ -12,6 +12,7 @@ function printSlots(array $slots): void
 
 function printStatusLine(Game $game)
 {
+    echo CLEAR_LINE;
     printf(
         "Prize: %4d bonus: %4d available: %4d\n",
         $game->getPrize(),
