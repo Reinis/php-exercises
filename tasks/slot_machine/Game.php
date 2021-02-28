@@ -12,14 +12,15 @@ class Game
 
     private array $elements = [
         '⭐' => 0,
-        '🍎' => 15,
-        '🍍' => 15,
+        '🍎' => 5,
+        '🍍' => 10,
         '🍇' => 15,
         '🍉' => 20,
         '🍒' => 25,
     ];
-    private array $elementsExpanded;
-    private array $elementsUnique;
+    private array $elementCounts = [10, 0, 5, 3, 1, 1];
+    private array $elementsExpanded = [];
+    private array $elementsBonus;
     private int $prize = 0;
     private int $bonus = 0;
     private array $rolls = [];
@@ -29,14 +30,22 @@ class Game
     {
         $this->player = $player;
 
-        $star = [];
-        for ($i = 0; $i < 5; $i++) {
-            $star[] = '⭐';
+        // Control the chance of rolling a given element
+        $repeats = array_combine(array_keys($this->elements), $this->elementCounts);
+
+        foreach ($repeats as $element => $number) {
+            $this->elementsExpanded = array_merge(
+                $this->elementsExpanded,
+                array_fill(0, $number, $element)
+            );
         }
 
-        $elements = ['🍎', '🍍', '🍇', '🍉', '🍒'];
-        $this->elementsExpanded = array_merge($elements, $star);
-        $this->elementsUnique = array_unique($this->elementsExpanded);
+        // Lower the chance to win another bonus in a bonus game
+        $this->elementsBonus = array_filter(
+            $this->elementsExpanded,
+            fn($element) => $element !== array_key_first($this->elements)
+        );
+        $this->elementsBonus[] = array_key_first($this->elements);
     }
 
     public function play(bool $bonusGame = false): void
@@ -92,7 +101,7 @@ class Game
     private function roll(bool $bonusGame = false): string
     {
         if ($bonusGame) {
-            return $this->elementsUnique[array_rand($this->elementsUnique)];
+            return $this->elementsBonus[array_rand($this->elementsBonus)];
         }
 
         return $this->elementsExpanded[array_rand($this->elementsExpanded)];
