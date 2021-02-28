@@ -13,7 +13,7 @@ require_once 'Constants.php';
 
 $game = new Game(new Player());
 
-do {
+while (true) {
     $input = readline('-> Start amount (min 10, step 10): ');
     $amount = filter_var($input, FILTER_VALIDATE_INT);
 
@@ -27,15 +27,17 @@ do {
         displayErrorMessage("Amount too small!");
     } elseif ($amount % 10 !== 0) {
         displayErrorMessage("Has to be a multiple of 10!");
+    } else {
+        break;
     }
-} while ($amount === false || $amount < 10 || $amount % 10 !== 0);
+}
 
 $game->setAmount($amount);
 initRolls($game, false);
 
 while ($game->getAmount() >= 0 || $game->getBonus() !== 0) {
     if ($game->getBonus() === 0) {
-        do {
+        while (true) {
             echo CLEAR_LINE . GO_TO_LINE_START;
 
             $input = readline("-> Bet: ");
@@ -51,8 +53,10 @@ while ($game->getAmount() >= 0 || $game->getBonus() !== 0) {
                 displayErrorMessage("Bet too small!");
             } elseif ($bet % 10 !== 0) {
                 displayErrorMessage("Bet has to be a multiple of 10!");
+            } else {
+                break;
             }
-        } while ($bet === false || $bet < 10 || $bet % 10 !== 0);
+        }
 
         // Check available money
         if ($bet > $game->getAmount()) {
