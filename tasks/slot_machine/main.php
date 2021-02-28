@@ -35,7 +35,7 @@ while (true) {
 $game->setAmount($amount);
 initRolls($game, false);
 
-while ($game->getAmount() >= 0 || $game->getBonus() !== 0) {
+while ($game->getAmount() > 0 || $game->getBonus() !== 0) {
     if ($game->getBonus() === 0) {
         while (true) {
             echo CLEAR_LINE . GO_TO_LINE_START;
