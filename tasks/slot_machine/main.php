@@ -22,15 +22,17 @@ do {
 $game->setAmount($amount);
 initRolls($game, false);
 
-while ($game->getAmount() >= 10 || $game->getBonus() !== 0) {
+while ($game->getAmount() >= 0 || $game->getBonus() !== 0) {
     if ($game->getBonus() === 0) {
         do {
             echo CLEAR_LINE . GO_TO_LINE_START;
 
-            $bet = filter_var(
-                readline("-> Bet: "),
-                FILTER_VALIDATE_INT
-            );
+            $input = readline("-> Bet: ");
+            $bet = filter_var($input, FILTER_VALIDATE_INT);
+
+            if ($input === 'q') {
+                exit("You receive " . $game->getAmount(). "!\n");
+            }
 
             echo GO_ONE_LINE_UP;
         } while ($bet === false || $bet < 10 || $bet % 10 !== 0);
