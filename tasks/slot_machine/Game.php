@@ -109,8 +109,10 @@ class Game
 
     private function addPrize(int $prize): void
     {
-        $this->prize += $prize * $this->player->getBet() / self::REWARD_FACTOR;
-        $this->player->reward($this->prize);
+        $prize *= $this->player->getBet() / self::REWARD_FACTOR;
+
+        $this->prize += $prize;
+        $this->player->reward($prize);
     }
 
     public function getBonus(): int
