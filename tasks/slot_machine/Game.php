@@ -57,6 +57,7 @@ class Game
             $this->bonus--;
         }
 
+        // Get rows of random elements
         for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
             $rolls[] = [];
 
@@ -67,18 +68,7 @@ class Game
 
         $this->rolls = $rolls;
 
-        // Check for win
-        foreach ($rolls as $roll) {
-            if (count(array_unique($roll)) === 1) {
-                if (end($roll) === $this->bonusElement) {
-                    $this->bonus += self::NUMBER_OF_BONUS_GAMES;
-                    continue;
-                }
-
-                $this->addPrize(end($roll)->getValue());
-            }
-        }
-
+        // Construct diagonals
         $diagonals = [[], []];
 
         for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
@@ -86,14 +76,18 @@ class Game
             $diagonals[1][] = $rolls[$i][self::NUMBER_OF_SLOTS - $i - 1];
         }
 
-        foreach ($diagonals as $diagonal) {
-            if (count(array_unique($diagonal)) === 1) {
-                if (end($diagonal) === $this->bonusElement) {
+        // Store all lines in one array
+        $lines = array_merge($rolls, $diagonals);
+
+        // Check for win
+        foreach ($lines as $line) {
+            if (count(array_unique($line)) === 1) {
+                if (end($line) === $this->bonusElement) {
                     $this->bonus += self::NUMBER_OF_BONUS_GAMES;
                     continue;
                 }
 
-                $this->addPrize(end($diagonal)->getValue());
+                $this->addPrize(end($line)->getValue());
             }
         }
     }
