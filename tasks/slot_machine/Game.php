@@ -43,7 +43,7 @@ class Game
         // Lower the chance to win another bonus in a bonus game
         $this->elementsBonus = array_filter(
             $this->elementsExpanded,
-            fn($element) => $element !== $this->bonusElement
+            fn(Element $element): bool => $element !== $this->bonusElement
         );
         $this->elementsBonus[] = $this->bonusElement;
     }
