@@ -99,10 +99,10 @@ class Game
     private function roll(bool $bonusGame = false): Element
     {
         if ($bonusGame) {
-            return $this->elementsBonus[array_rand($this->elementsBonus)];
+            return $this->elementsBonus[(int)array_rand($this->elementsBonus)];
         }
 
-        return $this->elementsExpanded[array_rand($this->elementsExpanded)];
+        return $this->elementsExpanded[(int)array_rand($this->elementsExpanded)];
     }
 
     private function addPrize(int $prize): void
