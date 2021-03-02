@@ -12,7 +12,7 @@ class Game
 
     private Element $bonusElement;
     private array $elements;
-    private array $elementsExpanded = [];
+    private array $elementsExpanded;
     private array $elementsBonus;
     private int $prize = 0;
     private int $bonus = 0;
@@ -33,12 +33,12 @@ class Game
         ];
 
         // Control the chance of rolling a given element
-        foreach ($this->elements as $element) {
-            $this->elementsExpanded = array_merge(
-                $this->elementsExpanded,
-                array_fill(0, $element->getWeight(), $element)
-            );
-        }
+        $this->elementsExpanded = array_merge(
+            ...array_map(
+                static fn(Element $element): array => array_fill(0, $element->getWeight(), $element),
+                $this->elements
+            )
+        );
 
         // Lower the chance to win another bonus in a bonus game
         $this->elementsBonus = array_filter(
