@@ -22,14 +22,24 @@ class Game
         $this->player = $player;
 
         // Control the chance of rolling a given element
+        $this->setExpandedElements($elements);
+
+        // Lower the chance to win another bonus in a bonus game
+        $this->setBonusElements($elements);
+    }
+
+    private function setExpandedElements(array $elements): void
+    {
         $this->elementsExpanded = array_merge(
             ...array_map(
                 static fn(Element $element): array => $element->repeat(),
                 $elements
             )
         );
+    }
 
-        // Lower the chance to win another bonus in a bonus game
+    private function setBonusElements(array $elements): void
+    {
         $this->elementsBonus = [
             ...array_filter(
                 $this->elementsExpanded,
