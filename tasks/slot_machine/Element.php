@@ -7,12 +7,14 @@ class Element
     private string $symbol;
     private int $value;
     private int $weight;
+    private bool $bonus;
 
-    public function __construct(string $symbol, int $value, int $weight)
+    public function __construct(string $symbol, int $value, int $weight, bool $bonus = false)
     {
         $this->symbol = $symbol;
         $this->value = $value;
         $this->weight = $weight;
+        $this->bonus = $bonus;
     }
 
     public function __toString(): string
@@ -38,5 +40,10 @@ class Element
     public function getValue(): int
     {
         return $this->value;
+    }
+
+    public function isBonus(): bool
+    {
+        return $this->bonus;
     }
 }

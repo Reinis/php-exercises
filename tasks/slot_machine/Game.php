@@ -10,7 +10,6 @@ class Game
 
     private const REWARD_FACTOR = 10;
 
-    private Element $bonusElement;
     private array $elements;
     private array $elementsExpanded;
     private array $elementsBonus;
@@ -22,9 +21,8 @@ class Game
     public function __construct(Player $player)
     {
         $this->player = $player;
-        $this->bonusElement = new Element('⭐', 0, 10);
         $this->elements = [
-            $this->bonusElement,
+            new Element('⭐', 0, 10, true),
             new Element('🍎', 5, 0),
             new Element('🍍', 10, 5),
             new Element('🍇', 15, 3),
@@ -41,11 +39,16 @@ class Game
         );
 
         // Lower the chance to win another bonus in a bonus game
-        $this->elementsBonus = array_filter(
-            $this->elementsExpanded,
-            fn(Element $element): bool => $element !== $this->bonusElement
-        );
-        $this->elementsBonus[] = $this->bonusElement;
+        $this->elementsBonus = [
+            ...array_filter(
+                $this->elementsExpanded,
+                static fn(Element $element): bool => !$element->isBonus()
+            ),
+            ...array_filter(
+                $this->elements,
+                static fn(Element $element): bool => $element->isBonus()
+            ),
+        ];
     }
 
     public function play(bool $bonusGame = false): void
@@ -82,7 +85,7 @@ class Game
         // Check for win
         foreach ($lines as $line) {
             if (count(array_unique($line)) === 1) {
-                if (end($line) === $this->bonusElement) {
+                if (end($line)->isBonus()) {
                     $this->bonus += self::NUMBER_OF_BONUS_GAMES;
                     continue;
                 }
