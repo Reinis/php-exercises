@@ -11,7 +11,16 @@ require_once 'Functions.php';
 require_once 'Constants.php';
 
 
-$game = new Game(new Player());
+$elements = [
+    new Element('⭐', 0, 10, true),
+    new Element('🍎', 5, 0),
+    new Element('🍍', 10, 5),
+    new Element('🍇', 15, 3),
+    new Element('🍉', 20, 1),
+    new Element('🍒', 25, 1),
+];
+
+$game = new Game($elements, new Player());
 
 while (true) {
     $input = readline('-> Start amount (min 10, step 10): ');

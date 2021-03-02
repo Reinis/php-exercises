@@ -10,7 +10,6 @@ class Game
 
     private const REWARD_FACTOR = 10;
 
-    private array $elements;
     private array $elementsExpanded;
     private array $elementsBonus;
     private int $prize = 0;
@@ -18,23 +17,15 @@ class Game
     private array $rolls = [];
     private Player $player;
 
-    public function __construct(Player $player)
+    public function __construct(array $elements, Player $player)
     {
         $this->player = $player;
-        $this->elements = [
-            new Element('⭐', 0, 10, true),
-            new Element('🍎', 5, 0),
-            new Element('🍍', 10, 5),
-            new Element('🍇', 15, 3),
-            new Element('🍉', 20, 1),
-            new Element('🍒', 25, 1),
-        ];
 
         // Control the chance of rolling a given element
         $this->elementsExpanded = array_merge(
             ...array_map(
                 static fn(Element $element): array => $element->repeat(),
-                $this->elements
+                $elements
             )
         );
 
@@ -45,7 +36,7 @@ class Game
                 static fn(Element $element): bool => !$element->isBonus()
             ),
             ...array_filter(
-                $this->elements,
+                $elements,
                 static fn(Element $element): bool => $element->isBonus()
             ),
         ];
