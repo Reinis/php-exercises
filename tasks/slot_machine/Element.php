@@ -25,13 +25,18 @@ class Element
         return $this->symbol;
     }
 
-    public function getValue(): int
+    public function repeat(): array
     {
-        return $this->value;
+        return array_fill(0, $this->getWeight(), $this);
     }
 
     public function getWeight(): int
     {
         return $this->weight;
+    }
+
+    public function getValue(): int
+    {
+        return $this->value;
     }
 }

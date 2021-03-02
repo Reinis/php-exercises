@@ -35,7 +35,7 @@ class Game
         // Control the chance of rolling a given element
         $this->elementsExpanded = array_merge(
             ...array_map(
-                static fn(Element $element): array => array_fill(0, $element->getWeight(), $element),
+                static fn(Element $element): array => $element->repeat(),
                 $this->elements
             )
         );
