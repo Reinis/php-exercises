@@ -5,7 +5,8 @@ namespace SlotMachine;
 class Game
 {
     public const NUMBER_OF_BONUS_GAMES = 5;
-    public const NUMBER_OF_SLOTS = 3;
+    public const NUMBER_OF_ROWS = 3;
+    public const NUMBER_OF_COLUMNS = 3;
     public const PLACEHOLDER_ELEMENT = '🧺';
 
     private const REWARD_FACTOR = 10;
@@ -62,10 +63,10 @@ class Game
         }
 
         // Get rows of random elements
-        for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
+        for ($i = 0; $i < self::NUMBER_OF_ROWS; $i++) {
             $rolls[] = [];
 
-            for ($j = 0; $j < self::NUMBER_OF_SLOTS; $j++) {
+            for ($j = 0; $j < self::NUMBER_OF_COLUMNS; $j++) {
                 $rolls[$i][] = $this->roll($bonusGame);
             }
         }
@@ -101,11 +102,20 @@ class Game
 
     private function constructDiagonals(array $rolls): array
     {
-        $diagonals = [[], []];
+        $diagonals = [];
 
-        for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
-            $diagonals[0][] = $rolls[$i][$i];
-            $diagonals[1][] = $rolls[$i][self::NUMBER_OF_SLOTS - $i - 1];
+        for ($row = 0; $row < self::NUMBER_OF_ROWS; $row++) {
+            $currentRow = $row;
+            $diagonal = [];
+
+            for ($col = 0; $col < self::NUMBER_OF_COLUMNS; $col++) {
+                $diagonal[] = $rolls[$currentRow][$col];
+
+                $evenCycle = intdiv($col + $row, self::NUMBER_OF_ROWS - 1) % 2 === 0;
+                $currentRow += $evenCycle ? 1 : -1;
+            }
+
+            $diagonals[] = $diagonal;
         }
 
         return $diagonals;

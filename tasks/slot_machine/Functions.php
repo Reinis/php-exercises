@@ -5,7 +5,7 @@ namespace SlotMachine;
 function printSlots(array $slots): void
 {
     printf(
-        trim(str_repeat(" %s", Game::NUMBER_OF_SLOTS)) . "\n",
+        trim(str_repeat(" %s", Game::NUMBER_OF_COLUMNS)) . "\n",
         ...$slots
     );
 }
@@ -27,9 +27,9 @@ function initRolls(Game $game, bool $moveCursor = true): void
         echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
     }
 
-    for ($i = 0; $i < Game::NUMBER_OF_SLOTS; $i++) {
+    for ($i = 0; $i < Game::NUMBER_OF_ROWS; $i++) {
         printSlots(
-            array_fill(0, Game::NUMBER_OF_SLOTS, Game::PLACEHOLDER_ELEMENT)
+            array_fill(0, Game::NUMBER_OF_COLUMNS, Game::PLACEHOLDER_ELEMENT)
         );
     }
 
@@ -43,7 +43,7 @@ function displayRolls(Game $game): void
     echo GO_TO_LINE_START . GO_FOUR_LINES_UP;
     sleep(1);
 
-    for ($j = 0; $j < Game::NUMBER_OF_SLOTS; $j++) {
+    for ($j = 0; $j < Game::NUMBER_OF_ROWS; $j++) {
         printSlots($rolls[$j]);
         sleep(1);
     }
