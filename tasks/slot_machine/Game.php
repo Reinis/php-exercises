@@ -2,6 +2,9 @@
 
 namespace SlotMachine;
 
+use Generator;
+use InvalidArgumentException;
+
 class Game
 {
     public const NUMBER_OF_BONUS_GAMES = 5;
@@ -105,20 +108,53 @@ class Game
         $diagonals = [];
 
         for ($row = 0; $row < self::NUMBER_OF_ROWS; $row++) {
-            $currentRow = $row;
-            $diagonal = [];
-
-            for ($col = 0; $col < self::NUMBER_OF_COLUMNS; $col++) {
-                $diagonal[] = $rolls[$currentRow][$col];
-
-                $evenCycle = intdiv($col + $row, self::NUMBER_OF_ROWS - 1) % 2 === 0;
-                $currentRow += $evenCycle ? 1 : -1;
+            if ($row !== self::NUMBER_OF_ROWS - 1) {
+                $diagonals[] = $this->getDiagonal($row, $rolls, true);
             }
-
-            $diagonals[] = $diagonal;
+            if ($row !== 0) {
+                $diagonals[] = $this->getDiagonal($row, $rolls, false);
+            }
         }
 
         return $diagonals;
+    }
+
+    private function getDiagonal(int $row, array $rolls, bool $down): array
+    {
+        $diagonal = [];
+
+        $seq = $this->generateDiagonalSequence($row, $down);
+
+        for ($col = 0; $col < self::NUMBER_OF_COLUMNS; $col++) {
+            $diagonal[] = $rolls[$seq->current()][$col];
+
+            $seq->next();
+        }
+
+        return $diagonal;
+    }
+
+    private function generateDiagonalSequence(int $startRow, bool $down): Generator
+    {
+        if (!$down && $startRow === 0) {
+            throw new InvalidArgumentException("No up diagonal for the first row.");
+        }
+        if ($down && $startRow === self::NUMBER_OF_ROWS - 1) {
+            throw new InvalidArgumentException("No down diagonal for the last row.");
+        }
+
+        $row = $startRow;
+        $directions = $down ? [1, -1] : [-1, 1];
+        $cycleLength = self::NUMBER_OF_ROWS - 1;
+        $sign = $down ? 1 : -1;
+
+        for ($i = 0; $i < self::NUMBER_OF_COLUMNS; $i++) {
+            yield $row;
+
+            $shift = ($cycleLength + $startRow * $sign) % $cycleLength;
+            $evenCycle = intdiv($i + $shift, $cycleLength) % 2 === 0;
+            $row += $evenCycle ? $directions[0] : $directions[1];
+        }
     }
 
     private function addPrize(int $prize): void
