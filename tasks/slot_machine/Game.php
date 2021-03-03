@@ -72,13 +72,7 @@ class Game
 
         $this->rolls = $rolls;
 
-        // Construct diagonals
-        $diagonals = [[], []];
-
-        for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
-            $diagonals[0][] = $rolls[$i][$i];
-            $diagonals[1][] = $rolls[$i][self::NUMBER_OF_SLOTS - $i - 1];
-        }
+        $diagonals = $this->constructDiagonals($rolls);
 
         // Store all lines in one array
         $lines = array_merge($rolls, $diagonals);
@@ -103,6 +97,18 @@ class Game
         }
 
         return $this->elementsExpanded[(int)array_rand($this->elementsExpanded)];
+    }
+
+    private function constructDiagonals(array $rolls): array
+    {
+        $diagonals = [[], []];
+
+        for ($i = 0; $i < self::NUMBER_OF_SLOTS; $i++) {
+            $diagonals[0][] = $rolls[$i][$i];
+            $diagonals[1][] = $rolls[$i][self::NUMBER_OF_SLOTS - $i - 1];
+        }
+
+        return $diagonals;
     }
 
     private function addPrize(int $prize): void
