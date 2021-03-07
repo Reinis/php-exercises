@@ -10,7 +10,7 @@ class Ingredients implements IteratorAggregate
     /**
      * @var Ingredient[]
      */
-    private array $ingredients;
+    private array $ingredients = [];
 
     public function __construct(Ingredient ...$ingredients)
     {
