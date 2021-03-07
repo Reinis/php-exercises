@@ -28,7 +28,7 @@ class Recipes implements IteratorAggregate
     {
         return new Recipes(
             ...array_filter(
-                $this->recipes,
+                array_values($this->recipes),
                 static fn(Recipe $recipe): bool => $recipe->requires($ingredient)
             )
         );

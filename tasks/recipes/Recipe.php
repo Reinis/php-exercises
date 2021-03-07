@@ -27,7 +27,7 @@ class Recipe
 
         return new Ingredients(
             ...array_filter(
-                $this->getIngredients()->toArray(),
+                array_values($this->getIngredients()->toArray()),
                 static fn(Ingredient $ingredient): bool => !in_array($ingredient->getName(), $productNames, true)
             )
         );
