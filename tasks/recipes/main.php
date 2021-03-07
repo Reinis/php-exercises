@@ -42,13 +42,39 @@ $recipes = new Recipes(...$recipeList);
 // Build the list of available products
 $productList = new Ingredients();
 
-do {
-    $answer = trim(readline('-> Ingredient: '));
+$products = implode("\n", $ingredientList);
+echo <<<EOT
+Available products:
+{$products}
 
-    if (isset($ingredientList[$answer])) {
-        $productList->addIngredient($ingredientList[$answer]);
+Enter number of products and the name of the product on each line:
+
+EOT;
+
+[$productCount] = fscanf(STDIN, "%d");
+
+if ($productCount === false || $productCount === null) {
+    echo "Error: Invalid number!\n";
+    echo <<<EOT
+    Usage:
+    $ php main.php
+    N
+    product1
+    ...
+    productN
+
+    EOT;
+}
+
+for ($i = 0; $i < $productCount; $i++) {
+    fscanf(STDIN, "%s", $product);
+
+    if (isset($ingredientList[$product])) {
+        $productList->addIngredient($ingredientList[$product]);
+    } else {
+        echo "Unknown ingredient: {$product}\n";
     }
-} while ($answer !== 'q');
+}
 
 
 // Print matching recipes with the missing ingredients
