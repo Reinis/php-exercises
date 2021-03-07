@@ -38,18 +38,20 @@ $recipeList = [
 
 $recipes = new Recipes(...$recipeList);
 
-$productList = [];
+
+// Build the list of available products
+$productList = new Ingredients();
 
 do {
     $answer = trim(readline('-> Ingredient: '));
 
     if (isset($ingredientList[$answer])) {
-        $productList[] = $ingredientList[$answer];
+        $productList->addIngredient($ingredientList[$answer]);
     }
 } while ($answer !== 'q');
 
-$productList = new Ingredients(...$productList);
 
+// Print matching recipes with the missing ingredients
 foreach ($productList as $product) {
     echo PHP_EOL;
     echo "With {$product} one can make:\n";
