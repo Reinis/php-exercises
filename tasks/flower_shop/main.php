@@ -24,11 +24,6 @@ require_once 'Warehouse3.php';
 require_once 'FlowerShop.php';
 
 
-// Discount %
-const DISCOUNT_FEMALE = 20;
-const DISCOUNT_MALE = 0;
-
-
 $flowers1 = new Flowers(
     new Flower('Tulips', 200),
     new Flower('Roses', 230),
@@ -81,17 +76,7 @@ do {
 } while ($amount === false || $amount < 1 || $amount > $shop->numAvailable($name));
 
 do {
-    $gender = trim(readline('-> male/female? '));
-} while ($gender !== 'male' && $gender !== 'female');
+    $customerGender = trim(readline('-> male/female? '));
+} while ($customerGender !== 'male' && $customerGender !== 'female');
 
-$discount = $gender === 'male' ? DISCOUNT_MALE : DISCOUNT_FEMALE;
-$discount = (100 - $discount) / 100;
-$price = $shop->getPrice($name);
-$total = round($amount * $price * $discount);
-
-echo "\nInvoice:\n";
-$formatString = "%8s: %s\n";
-printf($formatString, 'Flower', $name);
-printf($formatString, 'Price', $price);
-printf($formatString, 'Amount', $amount);
-printf($formatString, 'Total', $total);
+echo $shop->buyFlowers($name, $amount, $customerGender);

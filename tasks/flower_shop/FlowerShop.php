@@ -6,6 +6,10 @@ use InvalidArgumentException;
 
 class FlowerShop
 {
+    // Discount %
+    private const DISCOUNT_FEMALE = 20;
+    private const DISCOUNT_MALE = 0;
+
     /**
      * @var WarehouseInterface[]
      */
@@ -25,15 +29,6 @@ class FlowerShop
     public function setPrices(array $prices): void
     {
         $this->prices = $prices;
-    }
-
-    public function getPrice(string $name): int
-    {
-        if (!isset($this->prices[$name])) {
-            throw new InvalidArgumentException("Flower not available in the shop!");
-        }
-
-        return $this->prices[$name];
     }
 
     public function stockFlowers(Flowers $flowers): string
@@ -103,5 +98,31 @@ class FlowerShop
         }
 
         return $items;
+    }
+
+    public function buyFlowers(string $name, int $amount, string $customerGender): string
+    {
+        $discount = $customerGender === 'male' ? self::DISCOUNT_MALE : self::DISCOUNT_FEMALE;
+        $discount = (100 - $discount) / 100;
+        $price = $this->getPrice($name);
+        $total = round($amount * $price * $discount);
+
+        $invoice = "\nInvoice:\n";
+        $formatString = "%8s: %s\n";
+        $invoice .= sprintf($formatString, 'Flower', $name);
+        $invoice .= sprintf($formatString, 'Price', $price);
+        $invoice .= sprintf($formatString, 'Amount', $amount);
+        $invoice .= sprintf($formatString, 'Total', $total);
+
+        return $invoice;
+    }
+
+    private function getPrice(string $name): int
+    {
+        if (!isset($this->prices[$name])) {
+            throw new InvalidArgumentException("Flower not available in the shop!");
+        }
+
+        return $this->prices[$name];
     }
 }
