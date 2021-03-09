@@ -24,6 +24,11 @@ require_once 'Warehouse3.php';
 require_once 'FlowerShop.php';
 
 
+// Discount %
+const DISCOUNT_FEMALE = 20;
+const DISCOUNT_MALE = 0;
+
+
 $flowers1 = new Flowers(
     new Flower('Tulips', 200),
     new Flower('Roses', 230),
@@ -79,9 +84,10 @@ do {
     $gender = trim(readline('-> male/female? '));
 } while ($gender !== 'male' && $gender !== 'female');
 
-$discount = $gender === 'male' ? 1 : 0.80;
+$discount = $gender === 'male' ? DISCOUNT_MALE : DISCOUNT_FEMALE;
+$discount = (100 - $discount) / 100;
 $price = $shop->getPrice($name);
-$total = $amount * $price * $discount;
+$total = round($amount * $price * $discount);
 
 echo "\nInvoice:\n";
 $formatString = "%8s: %s\n";

@@ -41,8 +41,8 @@ class FlowerShop
         $messages = '';
 
         foreach ($flowers as $targetFlower) {
-            $currentFlower = new Flower($targetFlower->getName(), 0);
             $name = $targetFlower->getName();
+            $currentFlower = new Flower($name, 0);
 
             foreach ($this->warehouses as $warehouse) {
                 try {
