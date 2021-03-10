@@ -9,6 +9,7 @@ require_once 'Car.php';
 require_once 'Racer.php';
 require_once 'Racers.php';
 require_once 'Track.php';
+require_once 'RaceProgress.php';
 require_once 'Race.php';
 
 $track = new Track(70);
@@ -19,5 +20,5 @@ $racers = new Racers(
 );
 
 $race = new Race($track, $racers);
-$race->start();
+$race->start(true);
 echo $race->getLeaderboard();

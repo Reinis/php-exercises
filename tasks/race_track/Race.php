@@ -6,21 +6,31 @@ class Race
 {
     private Track $track;
     private Racers $racers;
+    private RaceProgress $display;
 
     public function __construct(Track $track, Racers $racers)
     {
         $this->track = $track;
         $this->racers = $racers;
+        $this->display = new RaceProgress($track);
     }
 
-    public function start(): void
+    public function start(bool $displayProgress = false): void
     {
+        if ($displayProgress) {
+            $this->display->print($this->racers, false);
+        }
+
         while ($this->isRacing()) {
             foreach ($this->racers as $racer) {
                 // Move only the racers still in the race
                 if ($racer->getProgress() < $this->track->getLength()) {
                     $racer->move();
                 }
+            }
+
+            if ($displayProgress) {
+                $this->display->print($this->racers);
             }
         }
     }

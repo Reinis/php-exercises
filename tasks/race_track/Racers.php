@@ -3,9 +3,10 @@
 namespace RaceTrack;
 
 use ArrayIterator;
+use Countable;
 use IteratorAggregate;
 
-class Racers implements IteratorAggregate
+class Racers implements IteratorAggregate, Countable
 {
     /**
      * @var Racer[]
@@ -45,5 +46,10 @@ class Racers implements IteratorAggregate
                 return $a->getTime() <=> $b->getTime();
             }
         );
+    }
+
+    public function count(): int
+    {
+        return count($this->racers);
     }
 }
