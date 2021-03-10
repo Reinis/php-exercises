@@ -36,9 +36,9 @@ class Car implements Movable
     private function hasCrashed(): bool
     {
         try {
-            $number = random_int(1, 100);
+            $number = random_int(0, 99);
         } catch (Exception $e) {
-            $number = 100;
+            $number = 99;
         }
 
         return $number < $this->crashRate;
