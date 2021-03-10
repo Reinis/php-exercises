@@ -46,7 +46,7 @@ class Racers implements IteratorAggregate, Countable
         uasort(
             $this->racers,
             static function (Racer $a, Racer $b): int {
-                if ($a->getTime() === $b->getTime()) {
+                if ($a->isCrashed() || $b->isCrashed() || $a->getTime() === $b->getTime()) {
                     // Sort descending by progress
                     return $b->getProgress() <=> $a->getProgress();
                 }

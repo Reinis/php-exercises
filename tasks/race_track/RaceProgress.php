@@ -5,6 +5,7 @@ namespace RaceTrack;
 class RaceProgress
 {
     private const RACER = '🏎';
+    private const CRASHED = '💥';
     private const TILE = '.';
     private const FINISH = '|';
 
@@ -29,8 +30,15 @@ class RaceProgress
         }
 
         foreach ($racers as $racer) {
+            $crashed = $racer->isCrashed();
+
             printf("%10s:", $racer->getName());
-            echo substr_replace($this->lane, self::RACER, $racer->getProgress(), 1);
+            echo substr_replace(
+                $this->lane,
+                $crashed ? self::CRASHED : self::RACER,
+                $racer->getProgress(),
+                $crashed ? 2 : 1
+            );
         }
 
         echo PHP_EOL;

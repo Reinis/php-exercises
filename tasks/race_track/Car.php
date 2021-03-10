@@ -10,22 +10,38 @@ class Car implements Movable
     private int $minSpeed;
     private int $maxSpeed;
     private int $largestSpeed = 10;
+    private int $crashRate;
 
-    public function __construct(string $name, int $minSpeed, int $maxSpeed)
+    public function __construct(string $name, int $minSpeed, int $maxSpeed, int $crashRate)
     {
         $this->name = $name;
-        $this->minSpeed = $minSpeed;
+        $this->minSpeed = max($minSpeed, 1);
         $this->maxSpeed = min($maxSpeed, $this->largestSpeed);
+        $this->crashRate = $crashRate;
     }
 
     public function move(): int
     {
+        if ($this->hasCrashed()) {
+            return -1;
+        }
+
         try {
             return random_int($this->minSpeed, $this->maxSpeed);
         } catch (Exception $e) {
-            /** @noinspection RandomApiMigrationInspection */
-            return rand($this->minSpeed, $this->maxSpeed);
+            return $this->minSpeed;
         }
+    }
+
+    private function hasCrashed(): bool
+    {
+        try {
+            $number = random_int(1, 100);
+        } catch (Exception $e) {
+            $number = 100;
+        }
+
+        return $number < $this->crashRate;
     }
 
     public function getId(): string

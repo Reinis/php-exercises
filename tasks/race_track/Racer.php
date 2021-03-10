@@ -8,6 +8,7 @@ class Racer
     private int $progress = 0;
     private int $time = 0;
     private int $largestSpeed;
+    private bool $crashed = false;
 
     public function __construct(Movable $racer)
     {
@@ -27,7 +28,18 @@ class Racer
 
     public function move(): void
     {
-        $this->progress += $this->racer->move();
+        if ($this->crashed) {
+            return;
+        }
+
+        $move = $this->racer->move();
+
+        if ($move < 0) {
+            $this->crashed = true;
+            return;
+        }
+
+        $this->progress += $move;
         $this->time++;
     }
 
@@ -39,5 +51,10 @@ class Racer
     public function getLargestSpeed(): int
     {
         return $this->largestSpeed;
+    }
+
+    public function isCrashed(): bool
+    {
+        return $this->crashed;
     }
 }
