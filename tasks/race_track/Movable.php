@@ -8,5 +8,7 @@ interface Movable
 
     public function getName(): string;
 
+    public function getLargestSpeed(): int;
+
     public function move(): int;
 }

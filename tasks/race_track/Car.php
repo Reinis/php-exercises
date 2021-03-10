@@ -9,12 +9,13 @@ class Car implements Movable
     private string $name;
     private int $minSpeed;
     private int $maxSpeed;
+    private int $largestSpeed = 10;
 
     public function __construct(string $name, int $minSpeed, int $maxSpeed)
     {
         $this->name = $name;
         $this->minSpeed = $minSpeed;
-        $this->maxSpeed = $maxSpeed;
+        $this->maxSpeed = min($maxSpeed, $this->largestSpeed);
     }
 
     public function move(): int
@@ -35,5 +36,10 @@ class Car implements Movable
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getLargestSpeed(): int
+    {
+        return $this->largestSpeed;
     }
 }

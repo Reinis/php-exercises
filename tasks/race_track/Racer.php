@@ -7,10 +7,12 @@ class Racer
     private Movable $racer;
     private int $progress = 0;
     private int $time = 0;
+    private int $largestSpeed;
 
     public function __construct(Movable $racer)
     {
         $this->racer = $racer;
+        $this->largestSpeed = $racer->getLargestSpeed();
     }
 
     public function getName(): string
@@ -32,5 +34,10 @@ class Racer
     public function getTime(): int
     {
         return $this->time;
+    }
+
+    public function getLargestSpeed(): int
+    {
+        return $this->largestSpeed;
     }
 }

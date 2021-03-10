@@ -12,7 +12,7 @@ class Race
     {
         $this->track = $track;
         $this->racers = $racers;
-        $this->display = new RaceProgress($track);
+        $this->display = new RaceProgress($track, $racers);
     }
 
     public function start(bool $displayProgress = false): void

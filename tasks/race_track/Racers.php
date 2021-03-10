@@ -12,12 +12,20 @@ class Racers implements IteratorAggregate, Countable
      * @var Racer[]
      */
     private array $racers;
+    private int $largestSpeed;
 
     public function __construct(Movable ...$racers)
     {
         foreach ($racers as $racer) {
             $this->addRacer($racer);
         }
+
+        $this->largestSpeed = max(
+            array_map(
+                static fn(Movable $racer): int => $racer->getLargestSpeed(),
+                $racers
+            )
+        );
     }
 
     private function addRacer(Movable $racer): void
@@ -51,5 +59,10 @@ class Racers implements IteratorAggregate, Countable
     public function count(): int
     {
         return count($this->racers);
+    }
+
+    public function getLargestSpeed(): int
+    {
+        return $this->largestSpeed;
     }
 }
