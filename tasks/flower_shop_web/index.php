@@ -50,7 +50,7 @@ EOS;
 $orderForm = <<<EOT
 <div>
     <br>
-    <form action="/?order=true">
+    <form action="/" method="post">
         <label for="name">Flowers:</label>
         <input type="text" id="name" name="name"><br>
         <label for="amount">Amount:</label>
@@ -104,31 +104,29 @@ echo $shop->listWeb();
 echo PHP_EOL;
 echo $orderForm;
 
-if (!isset($_GET['name'])) {
+if (!isset($_POST['name'])) {
     die();
 }
 
-$name = $_GET['name'] ?? "Roses";
+$name = $_POST['name'] ?? "Unknown";
 
 if (!$shop->isAvailable($name)) {
     echo "<strong>Flower not found:</strong> {$name}<br><br>";
-    echo "<a href='/'><button>Back</button></a>";
     die();
 }
 
-$amount = (int)($_GET['amount'] ?? 5);
+$amount = (int)($_POST['amount'] ?? 0);
 
 if ($amount < 1 || $amount > $shop->numAvailable($name)) {
     echo "<strong>Invalid amount:</strong> {$amount}<br><br>";
-    echo "<a href='/'><button>Back</button></a>";
     die();
 }
 
-$customerGender = $_GET['gender'] ?? 'female';
+$customerGender = $_POST['gender'] ?? 'unknown';
 
 if ($customerGender !== 'male' && $customerGender !== 'female') {
     echo "<strong>Invalid gender:</strong> {$customerGender}<br><br>";
-    echo "<a href='/'><button>Back</button></a>";
+    die();
 }
 
 echo $shop->buyFlowersWeb($name, $amount, $customerGender) . PHP_EOL;
