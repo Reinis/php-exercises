@@ -48,7 +48,9 @@ class View
     <div>
         <form action="/" method="post">
             <label for="name">Flowers:</label>
-            <input type="text" id="name" name="name"><br>
+            <select name="name" id="name">
+                {flower_options}
+            </select><br>
             <label for="amount">Amount:</label>
             <input type="number" id="amount" name="amount" min="1"><br><br>
             <input type="radio" id="female" name="gender" value="female" checked>
@@ -71,9 +73,16 @@ class View
         return $this->footer;
     }
 
-    public function getOrderForm(): string
+    public function getOrderForm(array $inventory): string
     {
-        return $this->orderForm;
+        $formatString = "            <option value='%s'>%s</option>\n";
+        $options = "";
+
+        foreach ($inventory as ['name' => $name]) {
+            $options .= sprintf($formatString, $name, $name);
+        }
+
+        return str_replace("            {flower_options}\n", $options, $this->orderForm);
     }
 
     public function getStockingMessages(string ...$messages): string

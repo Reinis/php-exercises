@@ -55,7 +55,7 @@ $inventory = $shop->getInventory();
 echo $view->getHeader();
 echo $view->getStockingMessages(...$messages);
 echo $view->getInventoryTable($inventory);
-echo $view->getOrderForm();
+echo $view->getOrderForm($inventory);
 
 if (!isset($_POST['name'])) {
     die($view->getFooter());
