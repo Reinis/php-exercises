@@ -20,7 +20,7 @@ class Warehouse implements WarehouseInterface
         try {
             return $this->flowers->getFlowerByName($name);
         } catch (InvalidArgumentException $exception) {
-            $message = "<div>" . $exception->getMessage() . " in " . $this->getName() . "</div>";
+            $message = $exception->getMessage() . " in " . $this->getName();
             throw new InvalidArgumentException($message);
         }
     }

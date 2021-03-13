@@ -31,9 +31,13 @@ class FlowerShop
         $this->prices = $prices;
     }
 
-    public function stockFlowers(Flowers $flowers): string
+    /**
+     * @param Flowers $flowers
+     * @return string[]
+     */
+    public function stockFlowers(Flowers $flowers): array
     {
-        $messages = '';
+        $messages = [];
 
         foreach ($flowers as $targetFlower) {
             $name = $targetFlower->getName();
@@ -55,7 +59,7 @@ class FlowerShop
                     $currentFlower->addAmount($available);
                     $targetFlower->subtractAmount($available);
                 } catch (InvalidArgumentException $exception) {
-                    $messages .= $exception->getMessage() . PHP_EOL;
+                    $messages[] = $exception->getMessage();
                     continue;
                 }
             }

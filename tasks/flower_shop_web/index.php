@@ -90,7 +90,11 @@ $shop = new FlowerShop($warehouse1, $warehouse2, $warehouse3);
 
 echo $style;
 echo "<div>Stocking up the shop...<br></div>\n";
-echo $shop->stockFlowers($flowersForSale);
+$messages = $shop->stockFlowers($flowersForSale);
+foreach ($messages as $message) {
+    printf("<div>%s</div>", $message);
+}
+echo "<hr>";
 
 $shop->setPrices($prices);
 
