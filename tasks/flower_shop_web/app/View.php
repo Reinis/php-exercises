@@ -116,7 +116,7 @@ class View
         return $result . "</table><br>\n";
     }
 
-    public function getInvoiceTable(array $invoice): string
+    public function getInvoiceTable(Invoice $invoice): string
     {
         $result = "<h3>Invoice:</h3>\n<table>\n";
         $formatString = <<<EOT

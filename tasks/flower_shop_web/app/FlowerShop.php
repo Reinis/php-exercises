@@ -145,18 +145,13 @@ class FlowerShop
         return $this->prices[$name];
     }
 
-    public function getInvoice(string $name, int $amount, string $customerGender): array
+    public function getInvoice(string $name, int $amount, string $customerGender): Invoice
     {
         $discount = $customerGender === 'male' ? self::DISCOUNT_MALE : self::DISCOUNT_FEMALE;
         $discount = (100 - $discount) / 100;
         $price = $this->getPrice($name);
         $total = round($amount * $price * $discount);
 
-        return [
-            'name' => $name,
-            'price' => $price,
-            'amount' => $amount,
-            'total' => $total,
-        ];
+        return new Invoice($name, $price, $amount, $total);
     }
 }
