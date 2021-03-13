@@ -22,39 +22,55 @@ use FlowerShopWeb\Warehouse2;
 use FlowerShopWeb\Warehouse3;
 
 
-$style = <<<EOS
-<style>
-    form, label, input {
-        padding-top: 8px;
-        padding-bottom: 8px;
-    }
+$header = <<<EOS
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flower Shop</title>
+    <style>
+        form, label, input {
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
 
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 250px;
-    }
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 250px;
+        }
 
-    td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-    }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
 
-    tr:nth-child(even) {
-        background-color: #dddddd;
-    }
-</style>
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+
 EOS;
+
+$footer = <<<EOT
+</body>
+</html>
+
+EOT;
 
 $orderForm = <<<EOT
 <div>
-    <br>
     <form action="/" method="post">
         <label for="name">Flowers:</label>
         <input type="text" id="name" name="name"><br>
         <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" min="1"><br>
+        <input type="number" id="amount" name="amount" min="1"><br><br>
         <input type="radio" id="female" name="gender" value="female" checked>
         <label for="female">Female</label>
         <input type="radio" id="male" name="gender" value="male">
@@ -62,6 +78,7 @@ $orderForm = <<<EOT
         <input type="submit" value="Submit">
     </form>
 </div>
+
 EOT;
 
 $flowers1 = new Flowers(
@@ -88,45 +105,83 @@ $warehouse3 = new Warehouse3('Warehouse3', 'Warehouse3.json');
 
 $shop = new FlowerShop($warehouse1, $warehouse2, $warehouse3);
 
-echo $style;
-echo "<div>Stocking up the shop...<br></div>\n";
+echo $header;
+echo "<div>Stocking up the shop...</div>\n";
 $messages = $shop->stockFlowers($flowersForSale);
 foreach ($messages as $message) {
-    printf("<div>%s</div>", $message);
+    printf("<div>%s</div>\n", $message);
 }
-echo "<hr>";
+echo "<hr>\n";
 
 $shop->setPrices($prices);
 
 // List flowers and prices
 echo "<h3>Inventory:</h3>\n";
-echo $shop->listWeb();
-echo PHP_EOL;
+echo <<<EOT
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Price</th>
+    </tr>
+
+EOT;
+
+$formatString = <<<EOT
+    <tr>
+        <td>%s</td>
+        <td>%d</td>
+        <td>%d</td>
+    </tr>
+
+EOT;
+
+foreach ($shop->getInventory() as $flower) {
+    printf($formatString, $flower['name'], $flower['amount'], $flower['price']);
+}
+
+echo "</table><br>\n";
 echo $orderForm;
 
 if (!isset($_POST['name'])) {
-    die();
+    die($footer);
 }
 
 $name = $_POST['name'] ?? "Unknown";
 
 if (!$shop->isAvailable($name)) {
-    echo "<strong>Flower not found:</strong> {$name}<br><br>";
-    die();
+    echo "<strong>Flower not found:</strong> {$name}";
+    die($footer);
 }
 
 $amount = (int)($_POST['amount'] ?? 0);
 
 if ($amount < 1 || $amount > $shop->numAvailable($name)) {
-    echo "<strong>Invalid amount:</strong> {$amount}<br><br>";
-    die();
+    echo "<strong>Invalid amount:</strong> {$amount}";
+    die($footer);
 }
 
 $customerGender = $_POST['gender'] ?? 'unknown';
 
 if ($customerGender !== 'male' && $customerGender !== 'female') {
-    echo "<strong>Invalid gender:</strong> {$customerGender}<br><br>";
-    die();
+    echo "<strong>Invalid gender:</strong> {$customerGender}";
+    die($footer);
 }
 
-echo $shop->buyFlowersWeb($name, $amount, $customerGender) . PHP_EOL;
+$invoice = $shop->getInvoice($name, $amount, $customerGender);
+
+echo "<h3>Invoice:</h3>\n<table>\n";
+$formatString = <<<EOT
+    <tr>
+        <td><strong>%s</strong></td>
+        <td>%s</td>
+    </tr>
+
+EOT;
+
+foreach ($invoice as $key => $value) {
+    printf($formatString, ucfirst($key), $value);
+}
+
+echo "</table>\n";
+echo $footer;

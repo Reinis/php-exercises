@@ -104,17 +104,17 @@ class FlowerShop
         return $items;
     }
 
-    public function listWeb(): string
+    public function getInventory(): array
     {
-        $items = '<table><tr><th>Name</th><th>Amount</th><th>Price</th></tr>';
+        $items = [];
 
-        $formatString = "<tr><td>%-10s</td> <td>%10d</td> <td>%5d</td></tr>\n";
         foreach ($this->flowers as $flower) {
-            $price = $this->prices[$flower->getName()];
-            $items .= sprintf($formatString, $flower->getName(), $flower->getAmount(), $price);
+            $items[] = [
+                'name' => $flower->getName(),
+                'amount' => $flower->getAmount(),
+                'price' => $this->prices[$flower->getName()],
+            ];
         }
-
-        $items .= '</table>';
 
         return $items;
     }
@@ -145,21 +145,18 @@ class FlowerShop
         return $this->prices[$name];
     }
 
-    public function buyFlowersWeb(string $name, int $amount, string $customerGender): string
+    public function getInvoice(string $name, int $amount, string $customerGender): array
     {
         $discount = $customerGender === 'male' ? self::DISCOUNT_MALE : self::DISCOUNT_FEMALE;
         $discount = (100 - $discount) / 100;
         $price = $this->getPrice($name);
         $total = round($amount * $price * $discount);
 
-        $invoice = "\n<h3>Invoice:</h3>\n<table>";
-        $formatString = "<tr><td><strong>%8s</strong></td> <td>%s</td></tr>\n";
-        $invoice .= sprintf($formatString, 'Flower', $name);
-        $invoice .= sprintf($formatString, 'Price', $price);
-        $invoice .= sprintf($formatString, 'Amount', $amount);
-        $invoice .= sprintf($formatString, 'Total', $total);
-        $invoice .= "</table>";
-
-        return $invoice;
+        return [
+            'name' => $name,
+            'price' => $price,
+            'amount' => $amount,
+            'total' => $total,
+        ];
     }
 }
