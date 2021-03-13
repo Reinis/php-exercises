@@ -1,0 +1,16 @@
+{
+    "name": "reinis/flower_shop_web",
+    "authors": [
+        {
+            "name": "Reinis Danne",
+            "email": "rei4dan@gmail.com"
+        }
+    ],
+    "require": {},
+    "description": "Flower Shop for Web",
+    "autoload": {
+        "psr-4": {
+            "FlowerShopWeb\\": "app/"
+        }
+    }
+}
