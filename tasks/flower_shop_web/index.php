@@ -22,6 +22,48 @@ use FlowerShopWeb\Warehouse2;
 use FlowerShopWeb\Warehouse3;
 
 
+$style = <<<EOS
+<style>
+    form, label, input {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 250px;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+EOS;
+
+$orderForm = <<<EOT
+<div>
+    <br>
+    <form action="/?order=true">
+        <label for="name">Flowers:</label>
+        <input type="text" id="name" name="name"><br>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" min="1"><br>
+        <input type="radio" id="female" name="gender" value="female" checked>
+        <label for="female">Female</label>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+EOT;
+
 $flowers1 = new Flowers(
     new Flower('Tulips', 200),
     new Flower('Roses', 230),
@@ -46,28 +88,43 @@ $warehouse3 = new Warehouse3('Warehouse3', 'Warehouse3.json');
 
 $shop = new FlowerShop($warehouse1, $warehouse2, $warehouse3);
 
+echo $style;
 echo "<div>Stocking up the shop...<br></div>\n";
 echo $shop->stockFlowers($flowersForSale);
 
 $shop->setPrices($prices);
 
 // List flowers and prices
-echo "<div><br>Inventory:</div>\n";
+echo "<h3>Inventory:</h3>\n";
 echo $shop->listWeb();
 echo PHP_EOL;
+echo $orderForm;
 
-//do {
-//    $name = trim(readline('-> Choose flower type: '));
-//} while (!$shop->isAvailable($name));
-$name = "Roses";
-//do {
-//    echo "Available: {$shop->numAvailable($name)}\n";
-//    $amount = filter_var(readline('-> Choose amount: '), FILTER_VALIDATE_INT);
-//} while ($amount === false || $amount < 1 || $amount > $shop->numAvailable($name));
-$amount = 5;
-//do {
-//    $customerGender = trim(readline('-> male/female? '));
-//} while ($customerGender !== 'male' && $customerGender !== 'female');
-$customerGender = 'female';
-//echo $shop->buyFlowers($name, $amount, $customerGender) . PHP_EOL;
+if (!isset($_GET['name'])) {
+    die();
+}
+
+$name = $_GET['name'] ?? "Roses";
+
+if (!$shop->isAvailable($name)) {
+    echo "<strong>Flower not found:</strong> {$name}<br><br>";
+    echo "<a href='/'><button>Back</button></a>";
+    die();
+}
+
+$amount = (int)($_GET['amount'] ?? 5);
+
+if ($amount < 1 || $amount > $shop->numAvailable($name)) {
+    echo "<strong>Invalid amount:</strong> {$amount}<br><br>";
+    echo "<a href='/'><button>Back</button></a>";
+    die();
+}
+
+$customerGender = $_GET['gender'] ?? 'female';
+
+if ($customerGender !== 'male' && $customerGender !== 'female') {
+    echo "<strong>Invalid gender:</strong> {$customerGender}<br><br>";
+    echo "<a href='/'><button>Back</button></a>";
+}
+
 echo $shop->buyFlowersWeb($name, $amount, $customerGender) . PHP_EOL;

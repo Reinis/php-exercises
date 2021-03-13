@@ -102,7 +102,7 @@ class FlowerShop
 
     public function listWeb(): string
     {
-        $items = '<table>';
+        $items = '<table><tr><th>Name</th><th>Amount</th><th>Price</th></tr>';
 
         $formatString = "<tr><td>%-10s</td> <td>%10d</td> <td>%5d</td></tr>\n";
         foreach ($this->flowers as $flower) {
@@ -148,8 +148,8 @@ class FlowerShop
         $price = $this->getPrice($name);
         $total = round($amount * $price * $discount);
 
-        $invoice = "\n<div><br>Invoice:</div>\n<table>";
-        $formatString = "<tr><td>%8s</td> <td>%s</td></tr>\n";
+        $invoice = "\n<h3>Invoice:</h3>\n<table>";
+        $formatString = "<tr><td><strong>%8s</strong></td> <td>%s</td></tr>\n";
         $invoice .= sprintf($formatString, 'Flower', $name);
         $invoice .= sprintf($formatString, 'Price', $price);
         $invoice .= sprintf($formatString, 'Amount', $amount);
