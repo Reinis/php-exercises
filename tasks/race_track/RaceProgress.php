@@ -2,6 +2,8 @@
 
 namespace RaceTrack;
 
+use Generator;
+
 class RaceProgress
 {
     private const RACER = '🏎';
@@ -29,8 +31,11 @@ class RaceProgress
     {
         $game = $this->race->start(true);
         $this->displayRacers($game->current(), false);
+        $game->next();
 
-        foreach ($game as $step) {
+        $remaining = static fn(Generator $steps): Generator => yield from $steps;
+
+        foreach ($remaining($game) as $step) {
             $this->displayRacers($step);
         }
     }
