@@ -28,14 +28,14 @@ class RaceProgress
     public function start(): void
     {
         $game = $this->race->start(true);
-        $this->print($game->current(), false);
+        $this->displayRacers($game->current(), false);
 
         foreach ($game as $step) {
-            $this->print($step);
+            $this->displayRacers($step);
         }
     }
 
-    public function print(Racers $racers, bool $moveCursor = true): void
+    public function displayRacers(Racers $racers, bool $moveCursor = true): void
     {
         if ($moveCursor) {
             $this->moveCursorToFirstLane($racers);
