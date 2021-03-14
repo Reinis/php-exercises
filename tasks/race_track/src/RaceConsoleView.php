@@ -4,7 +4,7 @@ namespace RaceTrack;
 
 use Generator;
 
-class RaceProgress
+class RaceConsoleView
 {
     private const RACER = '🏎';
     private const CRASHED = '💥';

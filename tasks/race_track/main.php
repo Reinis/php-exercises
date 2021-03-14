@@ -6,7 +6,7 @@ require_once 'vendor/autoload.php';
 
 use RaceTrack\Car;
 use RaceTrack\Race;
-use RaceTrack\RaceProgress;
+use RaceTrack\RaceConsoleView;
 use RaceTrack\Racers;
 use RaceTrack\Track;
 
@@ -19,6 +19,6 @@ $racers = new Racers(
 );
 
 $race = new Race($track, $racers);
-$view = new RaceProgress($race);
+$view = new RaceConsoleView($race);
 $view->start();
 $view->showLeaderboard();
