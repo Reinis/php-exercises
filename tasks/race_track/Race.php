@@ -22,12 +22,7 @@ class Race
         }
 
         while ($this->isRacing()) {
-            foreach ($this->racers as $racer) {
-                // Move only the racers still in the race
-                if (!$racer->isCrashed() && $racer->getProgress() < $this->track->getLength()) {
-                    $racer->move();
-                }
-            }
+            $this->advanceRacers();
 
             if ($displayProgress) {
                 $this->display->print($this->racers);
@@ -44,6 +39,16 @@ class Race
         }
 
         return false;
+    }
+
+    private function advanceRacers(): void
+    {
+        foreach ($this->racers as $racer) {
+            // Move only the racers still in the race
+            if (!$racer->isCrashed() && $racer->getProgress() < $this->track->getLength()) {
+                $racer->move();
+            }
+        }
     }
 
     public function getLeaderboard(): string
