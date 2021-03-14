@@ -6,6 +6,8 @@ use InvalidArgumentException;
 
 class Warehouse2 extends Warehouse
 {
+    private const STORAGE_DIR = 'storage';
+
     public function __construct(string $name, string $csvFileName)
     {
         $flowers = $this->readFlowersFromCsvFile($csvFileName);
@@ -15,7 +17,9 @@ class Warehouse2 extends Warehouse
 
     private function readFlowersFromCsvFile(string $csvFileName): Flowers
     {
-        if (($handle = fopen('storage/' . $csvFileName, 'rb')) === false) {
+        $filename = implode(DIRECTORY_SEPARATOR, [self::STORAGE_DIR, $csvFileName]);
+
+        if (($handle = fopen($filename, 'rb')) === false) {
             throw new InvalidArgumentException("Could not open file for reading: {$csvFileName}");
         }
 
