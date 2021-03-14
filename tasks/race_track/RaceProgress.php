@@ -67,18 +67,25 @@ class RaceProgress
         echo self::CONTROL_SEQUENCE_INTRODUCER . (count($racers) + 1) . self::MOVE_CURSOR_UP;
     }
 
-    public function showLeaderboard(): void
+    public function showLeaderboard(bool $furthestFirst = false): void
     {
         $result = "\nLeaderboard:\n";
         $result .= "Place Name       Time Progress\n";
-        $position = 1;
+        $position = 0;
+        $previousTime = 0;
 
         $racers = $this->race->getLeaderboard();
 
         foreach ($racers as $racer) {
+            if ($furthestFirst) {
+                $position++;
+            } elseif ($previousTime !== $racer->getTime()) {
+                $position++;
+                $previousTime = $racer->getTime();
+            }
             $result .= sprintf(
                 "%4d. %-10s %4d %d\n",
-                $position++,
+                $position,
                 $racer->getName(),
                 $racer->getTime(),
                 $racer->getProgress()
