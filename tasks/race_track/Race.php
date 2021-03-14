@@ -51,25 +51,11 @@ class Race
         }
     }
 
-    public function getLeaderboard(): string
+    public function getLeaderboard(): Racers
     {
-        $result = "\nLeaderboard:\n";
-        $result .= "Place Name       Time Progress\n";
-        $position = 1;
-
         $this->racers->sort();
 
-        foreach ($this->racers as $racer) {
-            $result .= sprintf(
-                "%4d. %-10s %4d %d\n",
-                $position++,
-                $racer->getName(),
-                $racer->getTime(),
-                $racer->getProgress()
-            );
-        }
-
-        return $result;
+        return $this->racers;
     }
 
     public function getTrack(): Track

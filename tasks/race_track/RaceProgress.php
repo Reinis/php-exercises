@@ -69,6 +69,22 @@ class RaceProgress
 
     public function showLeaderboard(): void
     {
-        echo $this->race->getLeaderboard();
+        $result = "\nLeaderboard:\n";
+        $result .= "Place Name       Time Progress\n";
+        $position = 1;
+
+        $racers = $this->race->getLeaderboard();
+
+        foreach ($racers as $racer) {
+            $result .= sprintf(
+                "%4d. %-10s %4d %d\n",
+                $position++,
+                $racer->getName(),
+                $racer->getTime(),
+                $racer->getProgress()
+            );
+        }
+
+        echo $result;
     }
 }
