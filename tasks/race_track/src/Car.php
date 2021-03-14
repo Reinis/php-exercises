@@ -23,7 +23,7 @@ class Car implements Movable
     public function move(): int
     {
         if ($this->hasCrashed()) {
-            return -1;
+            throw new RacerCrashException("{$this->name} has crashed!");
         }
 
         try {

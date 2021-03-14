@@ -30,9 +30,9 @@ class Racer
             return;
         }
 
-        $move = $this->racer->move();
-
-        if ($move < 0) {
+        try {
+            $move = $this->racer->move();
+        } catch (RacerCrashException $exception) {
             $this->crashed = true;
             return;
         }

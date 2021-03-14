@@ -10,5 +10,8 @@ interface Movable
 
     public function getLargestSpeed(): int;
 
+    /**
+     * @throws RacerCrashException
+     */
     public function move(): int;
 }
