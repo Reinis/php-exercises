@@ -20,5 +20,6 @@ $racers = new Racers(
 );
 
 $race = new Race($track, $racers);
-$race->start(true);
-echo $race->getLeaderboard();
+$view = new RaceProgress($race);
+$view->start();
+$view->showLeaderboard();

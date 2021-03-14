@@ -13,14 +13,26 @@ class RaceProgress
     private const MOVE_CURSOR_UP = "A";
 
     private string $lane;
+    private Race $race;
 
-    public function __construct(Track $track, Racers $racers)
+    public function __construct(Race $race)
     {
-        $trackLength = $track->getLength();
-        $laneLength = $track->getLength() + $racers->getLargestSpeed();
+        $this->race = $race;
+        $trackLength = $race->getTrack()->getLength();
+        $laneLength = $race->getTrack()->getLength() + $race->getRacers()->getLargestSpeed();
         $lane = str_repeat(self::TILE, $laneLength) . PHP_EOL;
 
         $this->lane = substr_replace($lane, self::FINISH, $trackLength, 1);
+    }
+
+    public function start(): void
+    {
+        $game = $this->race->start(true);
+        $this->print($game->current(), false);
+
+        foreach ($game as $step) {
+            $this->print($step);
+        }
     }
 
     public function print(Racers $racers, bool $moveCursor = true): void
@@ -48,5 +60,10 @@ class RaceProgress
     private function moveCursorToFirstLane(Racers $racers): void
     {
         echo self::CONTROL_SEQUENCE_INTRODUCER . (count($racers) + 1) . self::MOVE_CURSOR_UP;
+    }
+
+    public function showLeaderboard(): void
+    {
+        echo $this->race->getLeaderboard();
     }
 }

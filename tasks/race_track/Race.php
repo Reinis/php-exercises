@@ -2,30 +2,30 @@
 
 namespace RaceTrack;
 
+use Generator;
+
 class Race
 {
     private Track $track;
     private Racers $racers;
-    private RaceProgress $display;
 
     public function __construct(Track $track, Racers $racers)
     {
         $this->track = $track;
         $this->racers = $racers;
-        $this->display = new RaceProgress($track, $racers);
     }
 
-    public function start(bool $displayProgress = false): void
+    public function start(bool $displayProgress = false): Generator
     {
         if ($displayProgress) {
-            $this->display->print($this->racers, false);
+            yield $this->racers;
         }
 
         while ($this->isRacing()) {
             $this->advanceRacers();
 
             if ($displayProgress) {
-                $this->display->print($this->racers);
+                yield $this->racers;
             }
         }
     }
@@ -70,5 +70,15 @@ class Race
         }
 
         return $result;
+    }
+
+    public function getTrack(): Track
+    {
+        return $this->track;
+    }
+
+    public function getRacers(): Racers
+    {
+        return $this->racers;
     }
 }
