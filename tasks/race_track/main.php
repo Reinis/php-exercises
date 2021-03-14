@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace RaceTrack;
+require_once 'vendor/autoload.php';
 
-require_once 'Movable.php';
-require_once 'Car.php';
-require_once 'Racer.php';
-require_once 'Racers.php';
-require_once 'Track.php';
-require_once 'RaceProgress.php';
-require_once 'Race.php';
+use RaceTrack\Car;
+use RaceTrack\Race;
+use RaceTrack\RaceProgress;
+use RaceTrack\Racers;
+use RaceTrack\Track;
+
 
 $track = new Track(70);
 $racers = new Racers(

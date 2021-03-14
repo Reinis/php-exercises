@@ -1,0 +1,16 @@
+{
+    "name": "reinis/race_track",
+    "description": "Race Track",
+    "authors": [
+        {
+            "name": "Reinis Danne",
+            "email": "rei4dan@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "RaceTrack\\": "src/"
+        }
+    }
+}
