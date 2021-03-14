@@ -2,6 +2,7 @@
 
 namespace FlowerShopWeb;
 
+use Generator;
 use IteratorAggregate;
 
 class Invoice implements IteratorAggregate
@@ -19,12 +20,11 @@ class Invoice implements IteratorAggregate
         $this->total = $total;
     }
 
-    public function getIterator(): iterable
+    public function getIterator(): Generator
     {
-        yield 'name' => $this->getName();
-        yield 'price' => $this->getPrice();
-        yield 'amount' => $this->getAmount();
-        yield 'total' => $this->getTotal();
+        foreach (get_object_vars($this) as $key => $value) {
+            yield $key => $value;
+        }
     }
 
     public function getName(): string
