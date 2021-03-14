@@ -2,8 +2,7 @@
 
 namespace FlowerShopWeb;
 
-use InvalidArgumentException;
-use JsonException;
+use JsonCollectionParser\Parser;
 
 class Warehouse3 extends Warehouse
 {
@@ -17,27 +16,13 @@ class Warehouse3 extends Warehouse
     private function readFlowersFromJsonFile(string $jsonFileName): Flowers
     {
         $filename = 'storage/' . $jsonFileName;
-
-        if (($handle = fopen($filename, 'rb')) === false) {
-            throw new InvalidArgumentException("Could not open file for reading: {$jsonFileName}");
-        }
-
-        $json = fread($handle, filesize($filename));
         $flowers = new Flowers();
-        $data = null;
+        $parser = new Parser();
 
-        try {
-            $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-        }
-
-        if ($data !== false && $data !== null) {
-            foreach ($data as ['name' => $name, 'amount' => $amount]) {
-                $flowers->addFlower(new Flower($name, $amount));
-            }
-        }
-
-        fclose($handle);
+        $parser->parse(
+            $filename,
+            fn(array $item) => $flowers->addFlower(new Flower($item['name'], $item['amount']))
+        );
 
         return $flowers;
     }

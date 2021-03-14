@@ -4,8 +4,188 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "239cd3aba5d5d8fcb84fe2dd733c0f67",
-    "packages": [],
+    "content-hash": "a8be18f25e3d906fc04e0f9155db6e70",
+    "packages": [
+        {
+            "name": "maxakawizard/json-collection-parser",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MAXakaWIZARD/JsonCollectionParser.git",
+                "reference": "23cacbb1371710f0ec3162a802071e0c830c80b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MAXakaWIZARD/JsonCollectionParser/zipball/23cacbb1371710f0ec3162a802071e0c830c80b9",
+                "reference": "23cacbb1371710f0ec3162a802071e0c830c80b9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1",
+                "psr/http-message": "~1.0",
+                "salsify/json-streaming-parser": "^8.0.2"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3",
+                "phpunit/phpunit": ">6 <10",
+                "squizlabs/php_codesniffer": "~3.0"
+            },
+            "suggest": {
+                "ext-zlib": "Needed to support GZIP-compressed files"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JsonCollectionParser\\": "src/",
+                    "JsonCollectionParser\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Max Grigorian",
+                    "email": "maxakawizard@gmail.com"
+                }
+            ],
+            "description": "Streaming parser for large JSON files containing array of objects",
+            "homepage": "https://github.com/MAXakaWIZARD/JsonCollectionParser",
+            "keywords": [
+                "json"
+            ],
+            "support": {
+                "issues": "https://github.com/MAXakaWIZARD/JsonCollectionParser/issues",
+                "source": "https://github.com/MAXakaWIZARD/JsonCollectionParser/tree/1.8.0"
+            },
+            "time": "2021-02-08T13:01:35+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/master"
+            },
+            "time": "2016-08-06T14:39:51+00:00"
+        },
+        {
+            "name": "salsify/json-streaming-parser",
+            "version": "v8.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/salsify/jsonstreamingparser.git",
+                "reference": "4ae5394136a037e09402ba8b48dbf4e20475e69d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/salsify/jsonstreamingparser/zipball/4ae5394136a037e09402ba8b48dbf4e20475e69d",
+                "reference": "4ae5394136a037e09402ba8b48dbf4e20475e69d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-mbstring": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "ext-json": "*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "8.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JsonStreamingParser\\": "src",
+                    "JsonStreamingParser\\Test\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Gonzalez",
+                    "email": "rob@salsify.com",
+                    "homepage": "http://salsify.com/"
+                },
+                {
+                    "name": "Maxim Gnatenko",
+                    "email": "mgnatenko@gmail.com"
+                },
+                {
+                    "name": "Max Grigorian",
+                    "email": "maxakawizard@gmail.com",
+                    "homepage": "http://wizardcat.com/"
+                },
+                {
+                    "name": "ThePanz",
+                    "email": "thepanz@gmail.com"
+                }
+            ],
+            "description": "A streaming parser for JSON in PHP.",
+            "homepage": "https://github.com/salsify/jsonstreamingparser",
+            "keywords": [
+                "json",
+                "parser",
+                "streaming"
+            ],
+            "support": {
+                "issues": "https://github.com/salsify/jsonstreamingparser/issues",
+                "source": "https://github.com/salsify/jsonstreamingparser/tree/master"
+            },
+            "time": "2020-05-22T20:10:04+00:00"
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
