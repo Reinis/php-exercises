@@ -33,7 +33,7 @@ class Race
     private function isRacing(): bool
     {
         foreach ($this->racers as $racer) {
-            if (!$racer->isCrashed() && $racer->getProgress() < $this->track->getLength()) {
+            if ($this->isActive($racer)) {
                 return true;
             }
         }
@@ -41,11 +41,16 @@ class Race
         return false;
     }
 
+    private function isActive(Racer $racer): bool
+    {
+        return !$racer->isCrashed() && $racer->getProgress() < $this->track->getLength();
+    }
+
     private function advanceRacers(): void
     {
         foreach ($this->racers as $racer) {
             // Move only the racers still in the race
-            if (!$racer->isCrashed() && $racer->getProgress() < $this->track->getLength()) {
+            if ($this->isActive($racer)) {
                 $racer->move();
             }
         }
