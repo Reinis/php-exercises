@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 require_once 'vendor/autoload.php';
 
+use Dotenv\Dotenv;
 use FlowerShopWeb\Flower;
 use FlowerShopWeb\Flowers;
 use FlowerShopWeb\FlowerShop;
@@ -23,11 +24,9 @@ use FlowerShopWeb\Warehouse2;
 use FlowerShopWeb\Warehouse3;
 
 
-$flowers1 = new Flowers(
-    new Flower('Tulips', 200),
-    new Flower('Roses', 230),
-    new Flower('Magnolias', 160)
-);
+const DB_DSN = 'FLOWER_SHOP_DB_DSN';
+const DB_USER = 'FLOWER_SHOP_DB_USER';
+const DB_PASSWORD = 'FLOWER_SHOP_DB_PASSWORD';
 
 $flowersForSale = new Flowers(
     new Flower('Tulips', 300),
@@ -41,7 +40,16 @@ $prices = [
     'Lilies' => 7,
 ];
 
-$warehouse1 = new Warehouse1('Warehouse1', $flowers1);
+
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$dotenv->required([DB_DSN, DB_USER, DB_PASSWORD]);
+
+$dsn = $_ENV[DB_DSN];
+$user = $_ENV[DB_USER];
+$pass = $_ENV[DB_PASSWORD];
+
+$warehouse1 = new Warehouse1('Warehouse1', $dsn, $user, $pass);
 $warehouse2 = new Warehouse2('Warehouse2', 'Warehouse2.csv');
 $warehouse3 = new Warehouse3('Warehouse3', 'Warehouse3.json');
 
