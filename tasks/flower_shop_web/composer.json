@@ -7,7 +7,12 @@
         }
     ],
     "require": {
-        "maxakawizard/json-collection-parser": "~1.0"
+        "maxakawizard/json-collection-parser": "~1.0",
+        "vlucas/phpdotenv": "^5.3"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
     },
     "description": "Flower Shop for Web",
     "autoload": {
