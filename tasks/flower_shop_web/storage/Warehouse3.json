@@ -1,1 +1,14 @@
-[{"name":"Roses","amount":120},{"name":"Lilies","amount":140}]
+[
+  {
+    "id": 1,
+    "name": "Roses",
+    "price": 0,
+    "amount": 120
+  },
+  {
+    "id": 2,
+    "name": "Lilies",
+    "price": 0,
+    "amount": 140
+  }
+]

@@ -3,40 +3,32 @@
 namespace FlowerShopWeb;
 
 use Exception;
-use JsonCollectionParser\Parser;
+use FlowerShopWeb\Services\JSONService;
+use InvalidArgumentException;
 
 class Warehouse3 extends Warehouse
 {
-    private const STORAGE_DIR = 'storage';
-
-    /**
-     * @param string $name
-     * @param string $jsonFileName
-     * @throws Exception
-     */
-    public function __construct(string $name, string $jsonFileName)
+    public function __construct(string $name, string $fileName)
     {
-        $flowers = $this->readFlowersFromJsonFile($jsonFileName);
+        $this->dataService = new JSONService($fileName);
 
-        parent::__construct($name, $flowers);
+        parent::__construct($name, new Flowers());
     }
 
     /**
-     * @param string $jsonFileName
-     * @return Flowers
+     * @param string $name
+     * @return Flower
      * @throws Exception
      */
-    private function readFlowersFromJsonFile(string $jsonFileName): Flowers
+    public function getFlowerByName(string $name): Flower
     {
-        $filename = implode(DIRECTORY_SEPARATOR, [self::STORAGE_DIR, $jsonFileName]);
-        $flowers = new Flowers();
-        $parser = new Parser();
+        try {
+            $product = $this->dataService->getProductByName($name);
+        } catch (InvalidArgumentException $e) {
+            $message = $e->getMessage() . " in " . $this->getName();
+            throw new InvalidArgumentException($message);
+        }
 
-        $parser->parse(
-            $filename,
-            fn(array $item) => $flowers->addFlower(new Flower($item['name'], $item['amount']))
-        );
-
-        return $flowers;
+        return new Flower($product->getName(), $product->getAmount());
     }
 }
