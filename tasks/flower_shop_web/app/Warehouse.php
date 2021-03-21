@@ -7,24 +7,25 @@ use InvalidArgumentException;
 
 class Warehouse implements WarehouseInterface
 {
-    protected DataServiceInterface $dataService;
+    private DataServiceInterface $dataService;
     private string $name;
-    private Flowers $flowers;
 
-    public function __construct(string $name, Flowers $flowers)
+    public function __construct(string $name, DataServiceInterface $dataService)
     {
         $this->name = $name;
-        $this->flowers = $flowers;
+        $this->dataService = $dataService;
     }
 
     public function getFlowerByName(string $name): Flower
     {
         try {
-            return $this->flowers->getFlowerByName($name);
-        } catch (InvalidArgumentException $exception) {
-            $message = $exception->getMessage() . " in " . $this->getName();
+            $product = $this->dataService->getProductByName($name);
+        } catch (InvalidArgumentException $e) {
+            $message = $e->getMessage() . " in " . $this->getName();
             throw new InvalidArgumentException($message);
         }
+
+        return new Flower($product->getName(), $product->getAmount());
     }
 
     public function getName(): string
