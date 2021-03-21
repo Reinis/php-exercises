@@ -2,38 +2,27 @@
 
 namespace FlowerShopWeb;
 
+use FlowerShopWeb\Services\CSVService;
 use InvalidArgumentException;
 
 class Warehouse2 extends Warehouse
 {
-    private const STORAGE_DIR = 'storage';
-
-    public function __construct(string $name, string $csvFileName)
+    public function __construct(string $name, string $fileName)
     {
-        $flowers = $this->readFlowersFromCsvFile($csvFileName);
+        $this->dataService = new CSVService($fileName);
 
-        parent::__construct($name, $flowers);
+        parent::__construct($name, new Flowers());
     }
 
-    private function readFlowersFromCsvFile(string $csvFileName): Flowers
+    public function getFlowerByName(string $name): Flower
     {
-        $filename = implode(DIRECTORY_SEPARATOR, [self::STORAGE_DIR, $csvFileName]);
-
-        if (($handle = fopen($filename, 'rb')) === false) {
-            throw new InvalidArgumentException("Could not open file for reading: {$csvFileName}");
+        try {
+            $product = $this->dataService->getProductByName($name);
+        } catch (InvalidArgumentException $e) {
+            $message = $e->getMessage() . " in " . $this->getName();
+            throw new InvalidArgumentException($message);
         }
 
-        $flowers = new Flowers();
-
-        /** @var string[] $data */
-        while (($data = fgetcsv($handle, 1000)) !== false && $data !== null) {
-            if (isset($data[0], $data[1])) {
-                $flowers->addFlower(new Flower($data[0], $data[1]));
-            }
-        }
-
-        fclose($handle);
-
-        return $flowers;
+        return new Flower($product->getName(), $product->getAmount());
     }
 }
