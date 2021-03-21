@@ -1,0 +1,18 @@
+{
+  "name": "reinis/car_rental",
+  "description": "Car Rental",
+  "authors": [
+    {
+      "name": "Reinis Danne",
+      "email": "rei4dan@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "CarRental\\": "app/"
+    }
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  }
+}
