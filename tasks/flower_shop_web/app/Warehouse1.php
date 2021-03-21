@@ -2,33 +2,27 @@
 
 namespace FlowerShopWeb;
 
-use PDO;
-use PDOException;
+use FlowerShopWeb\Services\PDOService;
+use InvalidArgumentException;
 
 class Warehouse1 extends Warehouse
 {
     public function __construct(string $name, string $connectionString, string $user, string $password)
     {
-        $flowers = new Flowers();
+        $this->dataService = new PDOService($connectionString, $user, $password);
 
-        $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-            PDO::ATTR_EMULATE_PREPARES => false,
-        ];
+        parent::__construct($name, new Flowers());
+    }
 
+    public function getFlowerByName(string $name): Flower
+    {
         try {
-            $connection = new PDO($connectionString, $user, $password, $options);
-        } catch (PDOException $e) {
-            throw new PDOException($e->getMessage(), (int)$e->getCode());
+            $product = $this->dataService->getProductByName($name);
+        } catch (InvalidArgumentException $e) {
+            $message = $e->getMessage() . " in " . $this->getName();
+            throw new InvalidArgumentException($message);
         }
 
-        $data = $connection->query("select * from `Warehouse1`");
-
-        foreach ($data as $item) {
-            $flowers->addFlower(new Flower($item->name, $item->amount));
-        }
-
-        parent::__construct($name, $flowers);
+        return new Flower($product->getName(), $product->getAmount());
     }
 }

@@ -2,10 +2,12 @@
 
 namespace FlowerShopWeb;
 
+use FlowerShopWeb\Services\DataServiceInterface;
 use InvalidArgumentException;
 
 class Warehouse implements WarehouseInterface
 {
+    protected DataServiceInterface $dataService;
     private string $name;
     private Flowers $flowers;
 
