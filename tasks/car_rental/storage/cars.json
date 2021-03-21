@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "name": "VW",
+        "model": "Golf 5",
+        "fuelEconomy": 7.3,
+        "price": 15,
+        "status": 0
+    },
+    {
+        "id": 2,
+        "name": "VW",
+        "model": "Golf 6",
+        "fuelEconomy": 7.4,
+        "price": 18,
+        "status": 0
+    },
+    {
+        "id": 3,
+        "name": "VW",
+        "model": "Golf 7",
+        "fuelEconomy": 5.8,
+        "price": 25,
+        "status": 0
+    },
+    {
+        "id": 4,
+        "name": "VW",
+        "model": "Golf 6",
+        "fuelEconomy": 7.4,
+        "price": 18,
+        "status": 0
+    }
+]
